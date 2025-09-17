@@ -26,17 +26,22 @@ export class DepositoRelave {
     { field: 'fechaCreacion', header: 'Fecha de Creación' }
   ];
 
-  constructor(private depositoService: Deposito) {
+  ejemplo: IDeposito[] = [
+    { id: 1, nombreDeposito: 'Ejemplo 1', ubicacion: 'Ubicación 1', fechaCreacion: '2025-09-14' },
+    { id: 2, nombreDeposito: 'Ejemplo 2', ubicacion: 'Ubicación 2', fechaCreacion: '2025-09-15' },
+    { id: 3, nombreDeposito: 'Ejemplo 3', ubicacion: 'Ubicación 3', fechaCreacion: '2025-09-16' }
+  ];
 
+  constructor(private depositoService: Deposito) {
     this.depositoService.getAllDepositos().subscribe({
       next: data => {
         this.depositos = data;
         this.loading = false;
       },
       error: () => {
+        this.depositos = this.ejemplo;
         this.loading = false;
       }
     });
-
   }
 }
