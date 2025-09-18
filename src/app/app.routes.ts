@@ -6,6 +6,7 @@ import { Register } from './components/main/register/register';
 import { Hito } from './components/main/register/hito/hito';
 import { Deposito } from './components/main/register/deposito/deposito';
 import { DepositoRelave } from './components/main/deposito-relave/deposito-relave';
+import { Medida } from './components/main/register/medida/medida';
 // Importa los componentes si existen
 // import { HitosTopograficos } from './components/main/register/hitos-topograficos/hitos-topograficos';
 // import { Medidas } from './components/main/register/medidas/medidas';
@@ -22,7 +23,7 @@ export const routes: Routes = [
             { path: 'deposito', component: Deposito },
             // Descomenta y ajusta si tienes estos componentes:
             { path: 'hito', component: Hito },
-            // { path: 'medidas', component: Medidas },
+            { path: 'medida', component: Medida },
         ]
     },
     { path: '', redirectTo: 'inicio', pathMatch: 'full' },

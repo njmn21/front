@@ -1,0 +1,38 @@
+<div class="card">
+    <p-drawer header="Crear Nuevo Depósito" [(visible)]="rigth" position="right" styleClass="w-[500px]" (onHide)="limpiarFormulario()">
+        <form [formGroup]="depositoForm" (ngSubmit)="onSubmit()" class="m-2 p-2">
+            <div class="card flex flex-wrap justify-center items-end gap-4">
+                <p-floatlabel variant="on" class="w-full">
+                    <input pInputText id="nombreDeposito" formControlName="NombreDeposito" autocomplete="off"
+                        class="w-full h-12" [readonly]="readOnly" />
+                    <label for="nombreDeposito">Nombre Depósito</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full">
+                    <input pInputText id="ubicacion" formControlName="Ubicacion" autocomplete="off"
+                        class="w-full h-12" [readonly]="readOnly" />
+                    <label for="ubicacion">Ubicación</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full">
+                    <p-datepicker 
+                        formControlName="FechaCreacion" 
+                        [iconDisplay]="'input'" 
+                        [showIcon]="true"
+                        inputId="fechaCreacion" 
+                        class="w-full h-12" 
+                        [dateFormat]="'dd/mm/yy'"
+                        [readonlyInput]="readOnly"
+                    />
+                    <label for="fechaCreacion">Fecha de Creación</label>
+                </p-floatlabel>
+            </div>
+            <div class="flex justify-end mt-4">
+                <button pButton type="submit" label="Guardar" styleClass="bg-white text-black border-white"
+                    [disabled]="depositoForm.invalid"></button>
+            </div>
+        </form>
+    </p-drawer>
+    <div class="flex gap-2 justify-center">
+        <p-button type="button" (click)="rigth = true" icon="pi pi-plus" label="Crear"
+            styleClass="bg-white text-black border-white" />
+    </div>
+</div>

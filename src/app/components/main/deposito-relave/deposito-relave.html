@@ -1,27 +1,35 @@
 <h2 class="text-4xl font-bold mb-4">Depósitos de Relaves</h2>
-<hr class="mb-4 p-4" />
 <div class="card flex justify-end mb-4">
-    <button pButton class="bg-white border-white">
-        <i class="pi pi-plus" pButtonIcon></i>
-        <span pButtonLabel>Crear</span>
-    </button>
+    <app-form-deposito (depositoCreado)="cargarDepositos()"></app-form-deposito>
 </div>
-
 <div class="card">
     <p-table [columns]="cols" [value]="depositos" [tableStyle]="{ 'min-width': '50rem' }" [loading]="loading">
         <ng-template pTemplate="header" let-columns>
             <tr>
-                <th *ngFor="let col of columns">
+                <th *ngFor="let col of columns" [style.width]="col.width ? col.width : 'auto'">
                     {{ col.header }}
                 </th>
+                <th></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr>
-                <td *ngFor="let col of columns">
-                    {{ rowData[col.field] }}
+                <td *ngFor="let col of columns" [style.width]="col.width ? col.width : 'auto'">
+                    {{ rowData[col.field] ? rowData[col.field] : '-' }}
+                </td>
+                <td>
+                    <p-button icon="pi pi-search" severity="secondary" rounded 
+                        (click)="abrirShowDeposito(rowData)" />
                 </td>
             </tr>
         </ng-template>
     </p-table>
 </div>
+
+<!-- ...dentro del archivo... -->
+<app-show-deposito
+  *ngIf="showDepositoVisible"
+  [deposito]="depositoSeleccionado"
+  [visible]="showDepositoVisible"
+  (close)="showDepositoVisible = false">
+</app-show-deposito>
