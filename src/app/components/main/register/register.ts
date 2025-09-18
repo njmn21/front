@@ -26,7 +26,8 @@ export class Register {
       },
       {
         label: 'Medidas',
-        icon: 'pi pi-list'
+        icon: 'pi pi-list',
+        routerLink: ['medida']
       }
     ]
   }

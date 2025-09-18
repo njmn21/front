@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { IDeposito } from '../core/interfaces/deposito';
+import { IDepositoGet, IDepositoPost } from '../core/interfaces/deposito';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +15,8 @@ export class Deposito {
 
   constructor(private http: HttpClient) { }
 
-  getAllDepositos(): Observable<IDeposito[]> {
-    return this.http.get<{ result: IDeposito[] }>(this.baseUrl)
+  getAllDepositos(): Observable<IDepositoGet[]> {
+    return this.http.get<{ result: IDepositoGet[] }>(this.baseUrl)
       .pipe(
         map((response: any) => response.result),
         catchError(error => {
@@ -26,4 +26,16 @@ export class Deposito {
         })
       );
   }
+  addDeposito(deposito: IDepositoPost): Observable<IDepositoGet> {
+    const url = `${environment.API_URL}/Tailing/create-deposit`;
+    return this.http.post<{ result: IDepositoGet }>(url, deposito)
+      .pipe(
+        map((response: any) => response.result),
+        catchError(error => {
+          console.error('Error al agregar depósito:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
 }
