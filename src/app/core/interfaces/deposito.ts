@@ -10,3 +10,47 @@ export interface IDepositoPost {
     Ubicacion: string;
     FechaCreacion: string;
 }
+
+export interface IHitoGet {
+    HitoId: number;
+    NombreHito: string;
+    DepositoId: number;
+    NombreDeposito: string;
+}
+
+export interface IHitoPost {
+    NombreHito: string;
+    DepositoId: number;
+}
+
+export interface IMedidadGet {
+    medicionId: number;
+    este: number;
+    norte: number;
+    elevacion: number;
+    horizontalAbsoluto: number;
+    verticalAbsoluto: number;
+    totalAbsoluto: number;
+    acimutAbsoluto: number;
+    buzamientoAbsoluto: number;
+    horizontalRelativo: number;
+    verticalRelativo: number;
+    totalRelativo: number;
+    acimutRelativo: number;
+    buzamientoRelativo: number;
+    horizontalAcumulado: number;
+    velocidadMedia: number;
+    inversaVelocidadMedia: number;
+    fechaMedicion: string;
+    hitoId: number;
+    nombreHito: string;
+}
+
+export interface IMedidaPost {
+    Este: number;
+    Norte: number;
+    Elevacion: number;
+    FechaMedicion: string;
+    HitoId: number;
+    EsBase: boolean;
+}

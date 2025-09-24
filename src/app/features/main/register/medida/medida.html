@@ -1,0 +1,210 @@
+<div class="flex items-center justify-between mt-8">
+    <h2 class="text-2xl font-bold m-0">Medidas</h2>
+</div>
+
+<div class="card pt-4 pb-4 w-[88vw]">
+    <div class="table-container" style="overflow-x: auto;">
+        <p-table
+            #dt2
+            [value]="medidas"
+            dataKey="medicionId"
+            [rows]="10"
+            [rowsPerPageOptions]="[10, 25, 50]"
+            [loading]="loading"
+            [paginator]="true"
+            [globalFilterFields]="['nombreHito', 'este', 'norte', 'elevacion', 'horizontalAbsoluto', 'verticalAbsoluto', 'totalAbsoluto', 'acimutAbsoluto', 'buzamientoAbsoluto', 'horizontalRelativo', 'verticalRelativo', 'totalRelativo', 'acimutRelativo', 'buzamientoRelativo', 'horizontalAcumulado', 'velocidadMedia', 'inversaVelocidadMedia', 'fechaMedicion']"
+            [tableStyle]="{ 'min-width': '150rem' }"
+            [scrollable]="true"
+            scrollHeight="600px"
+            scrollDirection="both"
+            class="hover:bg-white"
+        >
+        <ng-template #header>
+            <tr>
+                <th rowspan="2" style="width:4%" class="text-center">#</th>
+                <th rowspan="2" style="width:6%" class="text-center">Hito</th>
+                <th rowspan="2" style="width:6%" class="text-center">Este</th>
+                <th rowspan="2" style="width:6%" class="text-center">Norte</th>
+                <th rowspan="2" style="width:6%" class="text-center">Elevación</th>
+                <th colspan="5" class="text-center">Absoluto</th>
+                <th colspan="5" class="text-center">Relativo</th>
+                <th rowspan="2" style="width:6%" class="text-center">H. Acumulado</th>
+                <th rowspan="2" style="width:6%" class="text-center">Vel. Media</th>
+                <th rowspan="2" style="width:6%" class="text-center">Inv. Vel. Media</th>
+                <th rowspan="2" style="width:7%" class="text-center">Fecha</th>
+            </tr>
+            <tr>
+                <th style="width:4%;" class="text-center">Horizontal</th>
+                <th style="width:4%;" class="text-center">Vertical</th>
+                <th style="width:4%;" class="text-center">Total</th>
+                <th style="width:4%;" class="text-center">Acimut</th>
+                <th style="width:5%;" class="text-center">Buzamiento</th>
+                <th style="width:4%;" class="text-center">Horizontal</th>
+                <th style="width:4%;" class="text-center">Vertical</th>
+                <th style="width:4%;" class="text-center">Total</th>
+                <th style="width:4%;" class="text-center">Acimut</th>
+                <th style="width:5%;" class="text-center">Buzamiento</th>
+            </tr>
+            <tr>
+                <th>
+                    <!-- Sin filtro para la enumeración -->
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="nombreHito" placeholder="Hito" ariaLabel="Filter Hito">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="Hito" style="width: 70px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="este" placeholder="Este" ariaLabel="Filter Este">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="Este" style="width: 70px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="norte" placeholder="Norte" ariaLabel="Filter Norte">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="Norte" style="width: 70px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="elevacion" placeholder="Elevación" ariaLabel="Filter Elevacion">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="Elev." style="width: 70px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="horizontalAbsoluto" placeholder="H. Abs." ariaLabel="Filter H Absoluto">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="H.A" style="width: 50px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="verticalAbsoluto" placeholder="V. Abs." ariaLabel="Filter V Absoluto">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="V.A" style="width: 50px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="totalAbsoluto" placeholder="T. Abs." ariaLabel="Filter T Absoluto">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="T.A" style="width: 50px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="acimutAbsoluto" placeholder="Acimut Abs." ariaLabel="Filter Acimut Abs">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="Az.A" style="width: 50px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="buzamientoAbsoluto" placeholder="Buzam. Abs." ariaLabel="Filter Buzam Abs">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="Bz.A" style="width: 60px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="horizontalRelativo" placeholder="H. Rel." ariaLabel="Filter H Relativo">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="H.R" style="width: 50px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="verticalRelativo" placeholder="V. Rel." ariaLabel="Filter V Relativo">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="V.R" style="width: 50px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="totalRelativo" placeholder="T. Rel." ariaLabel="Filter T Relativo">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="T.R" style="width: 50px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="acimutRelativo" placeholder="Acimut Rel." ariaLabel="Filter Acimut Rel">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="Az.R" style="width: 50px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="buzamientoRelativo" placeholder="Buzam. Rel." ariaLabel="Filter Buzam Rel">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="Bz.R" style="width: 60px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="horizontalAcumulado" placeholder="H. Acum." ariaLabel="Filter H Acumulado">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="H.Ac" style="width: 60px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="velocidadMedia" placeholder="Vel. Media" ariaLabel="Filter Velocidad">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="Vel" style="width: 60px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="inversaVelocidadMedia" placeholder="Inv. Vel." ariaLabel="Filter Inv Velocidad">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="Inv" style="width: 60px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="fechaMedicion" placeholder="Fecha" ariaLabel="Filter Fecha">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="Fecha" style="width: 80px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-medida let-rowIndex="rowIndex">
+            <tr class="hover:bg-white hover:text-black">
+                <td class="text-center">{{ rowIndex + 1 }}</td>
+                <td class="text-center">{{ medida.nombreHito }}</td>
+                <td class="text-center">{{ medida.este | number:'1.2-2' }}</td>
+                <td class="text-center">{{ medida.norte | number:'1.2-2' }}</td>
+                <td class="text-center">{{ medida.elevacion | number:'1.2-2' }}</td>
+                <td class="text-center">{{ medida.horizontalAbsoluto | number:'1.2-2' }}</td>
+                <td class="text-center">{{ medida.verticalAbsoluto | number:'1.2-2' }}</td>
+                <td class="text-center">{{ medida.totalAbsoluto | number:'1.2-2' }}</td>
+                <td class="text-center">{{ medida.acimutAbsoluto | number:'1.2-2' }}</td>
+                <td class="text-center">{{ medida.buzamientoAbsoluto | number:'1.2-2' }}</td>
+                <td class="text-center">{{ medida.horizontalRelativo | number:'1.2-2' }}</td>
+                <td class="text-center">{{ medida.verticalRelativo | number:'1.2-2' }}</td>
+                <td class="text-center">{{ medida.totalRelativo | number:'1.2-2' }}</td>
+                <td class="text-center">{{ medida.acimutRelativo | number:'1.2-2' }}</td>
+                <td class="text-center">{{ medida.buzamientoRelativo | number:'1.2-2' }}</td>
+                <td class="text-center">{{ medida.horizontalAcumulado | number:'1.2-2' }}</td>
+                <td class="text-center">{{ medida.velocidadMedia | number:'1.2-2' }}</td>
+                <td class="text-center">{{ medida.inversaVelocidadMedia | number:'1.2-2' }}</td>
+                <td class="text-center">{{ medida.fechaMedicion | date:'dd/MM/yyyy' }}</td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage> 
+            <tr>
+                <td colspan="19">No se encontraron medidas.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+    </div>
+</div>

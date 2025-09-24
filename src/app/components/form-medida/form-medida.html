@@ -1,0 +1,89 @@
+<div class="card">
+    <p-drawer 
+        header="Crear Nueva Medida" 
+        [(visible)]="right" 
+        position="right" 
+        styleClass="w-[500px]"
+        (onHide)="clearForm()"
+    >
+        <form 
+            [formGroup]="medidaForm" 
+            class="card flex flex-col gap-4 p-4"
+        >
+            <div class="card flex flex-col gap-4">
+                <p-floatlabel variant="on" class="w-full">
+                    <input 
+                        pInputText id="Este" 
+                        formControlName="Este" 
+                        autocomplete="off" 
+                        class="w-full h-12" 
+                        type="number"
+                    >
+                    <label for="Este">Este</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full">
+                    <input 
+                        pInputText id="Norte" 
+                        formControlName="Norte" 
+                        autocomplete="off" 
+                        class="w-full h-12" 
+                        type="number"
+                    >
+                    <label for="Norte">Norte</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full">
+                    <input 
+                        pInputText id="Elevacion" 
+                        formControlName="Elevacion" 
+                        autocomplete="off" 
+                        class="w-full h-12" 
+                        type="number"
+                    >
+                    <label for="Elevacion">Elevacion</label>
+                </p-floatlabel>
+                 <p-floatlabel 
+                    variant="on" 
+                    class="w-full"
+                >
+                    <p-datepicker 
+                        formControlName="FechaMedicion" 
+                        [iconDisplay]="'input'" 
+                        [showIcon]="true"
+                        inputId="fechaMedicion"
+                        class="w-full h-12"
+                        [dateFormat]="'dd/mm/yy'"
+                    />
+                    <label for="fechaMedicion">Fecha de Medición</label>
+                </p-floatlabel>
+                <div class="flex items-center gap-2">
+                    <span>¿Es inicial?</span>
+                    <p-checkbox 
+                        formControlName="checked" 
+                        [binary]="true"
+                        class="ml-2"
+                    >
+                    </p-checkbox>
+                </div>
+            </div>
+            <div class="flex justify-end mt-4">
+                <p-toast />
+                <p-confirmpopup />
+                <p-button 
+                    type="button" 
+                    label="Guardar" 
+                    styleClass="bg-white text-black border-white" 
+                    [disabled]="medidaForm.invalid"
+                    (onClick)="confirm($event)"
+                />
+            </div>
+        </form>
+    </p-drawer>
+    <div class="flex gap-2 justify-center">
+        <p-button 
+            type="button" 
+            (click)="right = true" 
+            icon="pi pi-plus"
+            styleClass="bg-white text-black border-white" 
+        />
+    </div>
+</div>

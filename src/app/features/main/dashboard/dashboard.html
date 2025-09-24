@@ -1,0 +1,32 @@
+<h2 class="text-4xl font-bold mb-4">Dashboard</h2>
+
+<div class="space-y-6 w-[86.5vw]">
+    <!-- Botón para descargar gráficos -->
+    <div class="flex justify-end mb-4">
+        <button class="p-button p-button-primary" (click)="descargarGraficos()">Descargar Gráficos</button>
+    </div>
+
+    <!-- Gráfico Horizontal Absoluto -->
+    <div class="card bg-white" id="chartHorizontal">
+        <div *ngIf="loading" class="flex justify-center items-center h-[30rem]">
+            <div class="text-black text-lg">Cargando datos...</div>
+        </div>
+        <p-chart *ngIf="!loading" type="line" [data]="data" [options]="options" class="h-[30rem]" />
+    </div>
+
+    <!-- Gráfico Vertical Absoluto -->
+    <div class="card bg-white" id="chartVertical">
+        <div *ngIf="loading" class="flex justify-center items-center h-[30rem]">
+            <div class="text-black text-lg">Cargando datos...</div>
+        </div>
+        <p-chart *ngIf="!loading" type="line" [data]="dataVertical" [options]="optionsVertical" class="h-[30rem]" />
+    </div>
+
+    <!-- Gráfico Total Absoluto -->
+    <div class="card bg-white" id="chartTotal">
+        <div *ngIf="loading" class="flex justify-center items-center h-[30rem]">
+            <div class="text-black text-lg">Cargando datos...</div>
+        </div>
+        <p-chart *ngIf="!loading" type="line" [data]="dataTotal" [options]="optionsTotal" class="h-[30rem]" />
+    </div>
+</div>

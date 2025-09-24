@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { LeftSidebar } from './components/left-sidebar/left-sidebar';
-import { Main } from './components/main/main';
+import { Main } from './features/main/main';
 
 @Component({
   selector: 'app-root',

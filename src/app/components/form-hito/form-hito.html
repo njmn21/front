@@ -1,0 +1,44 @@
+<div class="card">
+    <p-drawer 
+        header="Crear Nuevo Hito" 
+        [(visible)]="visible2" 
+        position="right"
+        styleClass="w-[500px]"
+        (onHide)="clearForm()"
+    >
+        <form 
+            [formGroup]="hitoForm" 
+            class="card flex flex-col gap-4 p-4"
+        >
+            <div class="card flex flex-col gap-4">
+                <p-floatlabel variant="on" class="w-full">
+                    <input pInputText id="nombreHito" formControlName="nombreHito" autocomplete="off"
+                        class="w-full h-12" />
+                    <label for="nombreHito">Nombre Hito</label>
+                </p-floatlabel>
+                <p-select [options]="depositos" formControlName="deposito" optionLabel="nombreDeposito" placeholder="Selecciona un depósito"
+                    class="w-full h-12" [showClear]="true" />
+            </div>
+            <div class="flex justify-end mt-4">
+                <p-toast />
+                <p-confirmpopup />
+                <p-button 
+                    type="button" 
+                    label="Guardar" 
+                    styleClass="bg-white text-black border-white"
+                    [disabled]="hitoForm.invalid" 
+                    (onClick)="confirm($event)" 
+                />
+            </div>
+        </form>
+    </p-drawer>
+    <div class="flex gap-2 justify-center">
+        <p-button 
+            type="button" 
+            (click)="visible2 = true" 
+            icon="pi pi-plus" 
+            label="Crear"
+            styleClass="bg-white text-black border-white" 
+        />
+    </div>
+</div>

@@ -1,23 +1,31 @@
 <h2 class="text-4xl font-bold mb-4">Depósitos de Relaves</h2>
 <div class="card flex justify-end mb-4">
-    <app-form-deposito (depositoCreado)="cargarDepositos()"></app-form-deposito>
+    <app-form-deposito (depositoCreado)="cargarDepositos(); mostrarToast($event)"></app-form-deposito>
 </div>
+<p-toast />
 <div class="card">
-    <p-table [columns]="cols" [value]="depositos" [tableStyle]="{ 'min-width': '50rem' }" [loading]="loading">
+    <p-table 
+        [columns]="cols" 
+        [value]="depositos" 
+        [tableStyle]="{ 'min-width': '50rem' }" 
+        [loading]="loading"
+    >
         <ng-template pTemplate="header" let-columns>
             <tr>
-                <th *ngFor="let col of columns" [style.width]="col.width ? col.width : 'auto'">
+                <th class="w-1/12 text-center">#</th>
+                <th *ngFor="let col of columns" class="w-1/5 text-center">
                     {{ col.header }}
                 </th>
-                <th></th>
+                <th class="w-1/5 text-center"></th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
             <tr>
-                <td *ngFor="let col of columns" [style.width]="col.width ? col.width : 'auto'">
+                <td class="w-1/12 text-center">{{ rowIndex + 1 }}</td>
+                <td *ngFor="let col of columns" class="w-1/5 text-center">
                     {{ rowData[col.field] ? rowData[col.field] : '-' }}
                 </td>
-                <td>
+                <td class="w-1/5">
                     <p-button icon="pi pi-search" severity="secondary" rounded 
                         (click)="abrirShowDeposito(rowData)" />
                 </td>
@@ -26,7 +34,6 @@
     </p-table>
 </div>
 
-<!-- ...dentro del archivo... -->
 <app-show-deposito
   *ngIf="showDepositoVisible"
   [deposito]="depositoSeleccionado"

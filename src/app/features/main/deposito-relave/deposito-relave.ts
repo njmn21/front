@@ -1,14 +1,17 @@
 import { Component } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import {
+  ConfirmationService,
+  MessageService
+} from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
-import { Deposito } from '../../../services/deposito';
-import { IDepositoGet } from '../../../core/interfaces/deposito';
-import { FormDeposito } from '../../form-deposito/form-deposito';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 
-import { ShowDeposito } from '../../show-deposito/show-deposito';
+import { Deposito } from '../../../core/services/deposito';
+import { IDepositoGet } from '../../../core/interfaces/deposito';
+import { FormDeposito } from '../../../components/form-deposito/form-deposito';
+import { ShowDeposito } from '../../../components/show-deposito/show-deposito';
 
 interface Column {
   field: string;
@@ -25,7 +28,10 @@ interface Column {
     ButtonModule,
     ShowDeposito
   ],
-  providers: [ConfirmationService, MessageService],
+  providers: [
+    ConfirmationService,
+    MessageService
+  ],
   templateUrl: './deposito-relave.html',
   styleUrl: './deposito-relave.css'
 })
@@ -50,7 +56,10 @@ export class DepositoRelave {
     { id: 3, nombreDeposito: 'Ejemplo 3', ubicacion: 'Ubicación 3', fechaCreacion: '2025-09-16', capacidad: 3000, estado: 'Activo' }
   ];
 
-  constructor(private depositoService: Deposito) {
+  constructor(
+    private depositoService: Deposito,
+    private messageService: MessageService
+  ) {
     this.cargarDepositos();
   }
 
@@ -65,6 +74,15 @@ export class DepositoRelave {
         this.depositos = this.ejemplo;
         this.loading = false;
       }
+    });
+  }
+
+  mostrarToast(mensaje: string) {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Depósito creado',
+      detail: mensaje,
+      life: 3000
     });
   }
 

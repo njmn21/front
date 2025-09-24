@@ -1,4 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --p-select-option-hover-background: #fff !important;
+  --p-select-option-hover-color: #222 !important;
+  --p-paginator-nav-button-selected-background: #fff !important;
+  --p-paginator-nav-button-selected-color: #222 !important;
+  --p-select-option-selected-background: #ffffff !important; /* Tailwind gray-200 */
+  --p-select-option-selected-color: #222 !important;
+  --p-select-option-selected-focus-background: #fff !important;
+  --p-select-option-selected-focus-color: #000000 !important;
+  --p-select-focus-border-color: #fff !important;
+}
+
 @import "tailwindcss";
 @import "primeicons/primeicons.css";
 

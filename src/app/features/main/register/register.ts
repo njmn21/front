@@ -5,28 +5,23 @@ import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  imports: [Menubar, RouterOutlet],
+  imports: [RouterOutlet, Menubar],
   templateUrl: './register.html',
   styleUrl: './register.css'
 })
-export class Register {
+export class Register implements OnInit {
   items: MenuItem[] | undefined;
 
   ngOnInit() {
     this.items = [
       {
-        label: 'Deposito Relaves',
-        icon: 'pi pi-list',
-        routerLink: ['deposito']
-      },
-      {
         label: 'Hitos Topograficos',
-        icon: 'pi pi-list',
+        icon: 'pi pi-list-check',
         routerLink: ['hito']
       },
       {
         label: 'Medidas',
-        icon: 'pi pi-list',
+        icon: 'pi pi-list-check',
         routerLink: ['medida']
       }
     ]

@@ -1,5 +1,0 @@
-:host ::ng-deep .p-paginator .p-paginator-page.p-highlight {
-    background: #fff !important;   /* fondo blanco */
-    color: #111 !important;        /* texto negro */
-    border-color: #fff !important;
-}
