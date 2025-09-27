@@ -242,7 +242,14 @@ export class Dashboard {
     this.optionsTotal = {
       ...generateChartOptions(baseOptions, chartOptions.total.title.join(' '), chartOptions.total.yAxisTitle, chartOptions.total.max),
       plugins: {
-        backgroundZonesEnabled: true
+        backgroundZonesEnabled: true,
+        title: {
+          display: true,
+          text: 'Desplazamiento Total Absoluto (cm)',
+          font: {
+            size: 16
+          }
+        }
       }
     };
     this.optionsEsteNorte = {
@@ -250,6 +257,13 @@ export class Dashboard {
         legend: {
           display: true,
           position: 'top'
+        },
+        title: {
+          display: true,
+          text: 'Trayectoria del Punto de Control Topográfico',
+          font: {
+            size: 16
+          }
         }
       },
       scales: {
@@ -269,9 +283,31 @@ export class Dashboard {
     };
 
     // Options for average speed chart
-    this.optionsAverageSpeed = generateChartOptions(baseOptions, 'Velocidad Media', 'Velocidad Media (m/s)', 6);
+    this.optionsAverageSpeed = generateChartOptions(baseOptions, 'Velocidad Media', 'Velocidad Media (cm/día)', 6);
     this.optionsAverageSpeed.scales.y.min = 0;
     this.optionsAverageSpeed.scales.y.ticks.stepSize = 1;
+
+    // Set legend position to the right for all charts
+    this.options.plugins.legend = {
+      display: true,
+      position: 'right'
+    };
+    this.optionsVertical.plugins.legend = {
+      display: true,
+      position: 'right'
+    };
+    this.optionsTotal.plugins.legend = {
+      display: true,
+      position: 'right'
+    };
+    this.optionsEsteNorte.plugins.legend = {
+      display: true,
+      position: 'right'
+    };
+    this.optionsAverageSpeed.plugins.legend = {
+      display: true,
+      position: 'right'
+    };
 
     this.cd.markForCheck();
   }

@@ -22,6 +22,7 @@ export class LeftSidebar {
 
   visible: boolean = true;
   checked: boolean = false; // Added property for toggle switch
+  selectedItem: string = ''; // Added property to track selected item
 
   items = [
     {
@@ -32,7 +33,7 @@ export class LeftSidebar {
     {
       routeLink: '/dashboard',
       icon: 'pi pi-fw pi-chart-bar',
-      label: 'Dashboard'
+      label: 'Gráficas'
     },
     {
       routeLink: '/deposito-relave',
@@ -55,5 +56,9 @@ export class LeftSidebar {
     if (element) {
       element.classList.toggle('my-app-dark');
     }
+  }
+
+  onItemSelect(routeLink: string): void {
+    this.selectedItem = routeLink; // Update selected item
   }
 }

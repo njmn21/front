@@ -54,3 +54,11 @@ export interface IMedidaPost {
     HitoId: number;
     EsBase: boolean;
 }
+
+export interface IMaxMedidaGet {
+    totalAbsoluto: number;
+    acimutAbsoluto: number;
+    buzamientoAbsoluto: number;
+    velocidadMedia: number;
+    fechaMedicion: string;
+}

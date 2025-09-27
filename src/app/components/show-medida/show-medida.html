@@ -7,82 +7,84 @@
         [style]="{ width: '30rem' }"
         (onHide)="cerrar()"
     >
-        <div *ngIf="medida" class="m-2">
+        @if (medida) {
+          <div class="m-2">
             <div class="grid grid-cols-2 gap-4">
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.nombreHito" class="w-full h-12" readonly />
-                    <label>Nombre Hito</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.este" class="w-full h-12" readonly />
-                    <label>Este</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.norte" class="w-full h-12" readonly />
-                    <label>Norte</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.elevacion" class="w-full h-12" readonly />
-                    <label>Elevación</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.horizontalAbsoluto" class="w-full h-12" readonly />
-                    <label>Horizontal Absoluto</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.verticalAbsoluto" class="w-full h-12" readonly />
-                    <label>Vertical Absoluto</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.totalAbsoluto" class="w-full h-12" readonly />
-                    <label>Total Absoluto</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.acimutAbsoluto" class="w-full h-12" readonly />
-                    <label>Acimut Absoluto</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.buzamientoAbsoluto" class="w-full h-12" readonly />
-                    <label>Buzamiento Absoluto</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.horizontalRelativo" class="w-full h-12" readonly />
-                    <label>Horizontal Relativo</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.verticalRelativo" class="w-full h-12" readonly />
-                    <label>Vertical Relativo</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.totalRelativo" class="w-full h-12" readonly />
-                    <label>Total Relativo</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.acimutRelativo" class="w-full h-12" readonly />
-                    <label>Acimut Relativo</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.buzamientoRelativo" class="w-full h-12" readonly />
-                    <label>Buzamiento Relativo</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.horizontalAcumulado" class="w-full h-12" readonly />
-                    <label>Horizontal Acumulado</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.velocidadMedia" class="w-full h-12" readonly />
-                    <label>Velocidad Media</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.inversaVelocidadMedia" class="w-full h-12" readonly />
-                    <label>Inversa Velocidad Media</label>
-                </p-floatlabel>
-                <p-floatlabel variant="on" class="w-full mb-3">
-                    <input pInputText [value]="medida.fechaMedicion | date:'dd/MM/yyyy'" class="w-full h-12" readonly />
-                    <label>Fecha Medicion</label>
-                </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.nombreHito" class="w-full h-12" readonly />
+                <label>Nombre Hito</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.este" class="w-full h-12" readonly />
+                <label>Este</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.norte" class="w-full h-12" readonly />
+                <label>Norte</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.elevacion" class="w-full h-12" readonly />
+                <label>Elevación</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.horizontalAbsoluto" class="w-full h-12" readonly />
+                <label>Horizontal Absoluto</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.verticalAbsoluto" class="w-full h-12" readonly />
+                <label>Vertical Absoluto</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.totalAbsoluto" class="w-full h-12" readonly />
+                <label>Total Absoluto</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.acimutAbsoluto" class="w-full h-12" readonly />
+                <label>Acimut Absoluto</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.buzamientoAbsoluto" class="w-full h-12" readonly />
+                <label>Buzamiento Absoluto</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.horizontalRelativo" class="w-full h-12" readonly />
+                <label>Horizontal Relativo</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.verticalRelativo" class="w-full h-12" readonly />
+                <label>Vertical Relativo</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.totalRelativo" class="w-full h-12" readonly />
+                <label>Total Relativo</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.acimutRelativo" class="w-full h-12" readonly />
+                <label>Acimut Relativo</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.buzamientoRelativo" class="w-full h-12" readonly />
+                <label>Buzamiento Relativo</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.horizontalAcumulado" class="w-full h-12" readonly />
+                <label>Horizontal Acumulado</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.velocidadMedia" class="w-full h-12" readonly />
+                <label>Velocidad Media</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.inversaVelocidadMedia" class="w-full h-12" readonly />
+                <label>Inversa Velocidad Media</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                <input pInputText [value]="medida.fechaMedicion | date:'dd/MM/yyyy'" class="w-full h-12" readonly />
+                <label>Fecha Medicion</label>
+              </p-floatlabel>
             </div>
-        </div>
+          </div>
+        }
         <div class="flex justify-end gap-2 mt-4">
             <p-button label="Cerrar" severity="secondary" (click)="cerrar()" />
         </div>

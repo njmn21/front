@@ -9,8 +9,10 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
+import { FloatLabelModule } from 'primeng/floatlabel';
+
 import { MedidaService } from '../../../../core/services/medida-service';
-import { IHitoGet, IMedidaGet } from '../../../../core/interfaces/deposito';
+import { IHitoGet, IMaxMedidaGet, IMedidaGet } from '../../../../core/interfaces/deposito';
 import { ShowMedida } from '../../../../components/show-medida/show-medida';
 import { HitoService } from '../../../../core/services/hito-service';
 
@@ -27,7 +29,8 @@ import { HitoService } from '../../../../core/services/hito-service';
     InputTextModule,
     MultiSelectModule,
     SelectModule,
-    ShowMedida
+    ShowMedida,
+    FloatLabelModule
   ],
   templateUrl: './medida.html',
   styleUrls: ['./medida.css']
@@ -39,6 +42,7 @@ export class Medida implements OnInit {
   showDialog: boolean = false;
   hitos: IHitoGet[] = [];
   selectedHitos: IHitoGet | null = null;
+  maxMedida: IMaxMedidaGet | null = null;
 
   constructor(
     private medidaService: MedidaService,
@@ -47,20 +51,14 @@ export class Medida implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+
+    setTimeout(() => {
+      this.loading = false;
+    }, 3000);
+
     this.hitoService.getAllHitos().subscribe((hitos: IHitoGet[]) => {
       this.hitos = hitos;
     });
-    this.medidaService.getAllMedidas().subscribe({
-      next: (data: IMedidaGet[]) => {
-        this.medidas = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Error cargando medidas:', err);
-        this.loading = false;
-      }
-    });
-
   }
 
   clear(table: Table) {
@@ -88,6 +86,15 @@ export class Medida implements OnInit {
         },
         error: (err) => {
           this.loading = false;
+        }
+      });
+
+      this.medidaService.getMaxMedidaById(selectedHito.hitoId).subscribe({
+        next: (maxMedida) => {
+          this.maxMedida = maxMedida;
+        },
+        error: (err) => {
+          console.error('Error fetching maxMedida:', err);
         }
       });
     }

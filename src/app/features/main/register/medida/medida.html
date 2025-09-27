@@ -14,6 +14,39 @@
     </div>
 </div>
 
+<div class="card mt-4">
+    <h3 class="text-xl font-bold">Medición Máxima</h3>
+    @if (maxMedida != null) {
+        <div class="grid grid-cols-5 gap-4 pt-4">
+            <p-floatlabel variant="on" class="w-full">
+                <input pInputText id="totalAbsoluto" [value]="maxMedida.totalAbsoluto | number:'1.2-2'" readonly class="w-full h-12" />
+                <label for="totalAbsoluto">Desplazamiento Máximo Registrado (cm)</label>
+            </p-floatlabel>
+            <p-floatlabel variant="on" class="w-full">
+                <input pInputText id="acimutAbsoluto" [value]="maxMedida.acimutAbsoluto | number:'1.2-2'" readonly class="w-full h-12" />
+                <label for="acimutAbsoluto">Acimut</label>
+            </p-floatlabel>
+            <p-floatlabel variant="on" class="w-full">
+                <input pInputText id="buzamientoAbsoluto" [value]="maxMedida.buzamientoAbsoluto | number:'1.2-2'" readonly class="w-full h-12" />
+                <label for="buzamientoAbsoluto">Buzamiento</label>
+            </p-floatlabel>
+            <p-floatlabel variant="on" class="w-full">
+                <input pInputText id="velocidadMedia" [value]="maxMedida.velocidadMedia | number:'1.2-2'" readonly class="w-full h-12" />
+                <label for="velocidadMedia">Velocidad Máxima Registrada (cm/día)</label>
+            </p-floatlabel>
+            <p-floatlabel variant="on" class="w-full">
+                <input pInputText id="fechaMedicion" [value]="maxMedida.fechaMedicion | date:'dd/MM/yyyy'" readonly class="w-full h-12" />
+                <label for="fechaMedicion">Fecha Medición</label>
+            </p-floatlabel>
+        </div>
+    }
+    @if (maxMedida == null) {
+        <div>
+            <p>No se encontraron mediciones para ver los máximos.</p>
+        </div>
+    }
+</div>
+
 <div class="card pt-4 pb-4 w-[88vw]">
     <div class="table-container" style="overflow-x: auto;">
         <p-table
@@ -22,9 +55,15 @@
             dataKey="medicionId"
             [rows]="10"
             [rowsPerPageOptions]="[10, 25, 50]"
-            [loading]="loading"
             [paginator]="true"
-            [globalFilterFields]="['nombreHito', 'este', 'norte', 'elevacion', 'horizontalAbsoluto', 'verticalAbsoluto', 'totalAbsoluto', 'acimutAbsoluto', 'buzamientoAbsoluto', 'horizontalRelativo', 'verticalRelativo', 'totalRelativo', 'acimutRelativo', 'buzamientoRelativo', 'horizontalAcumulado', 'velocidadMedia', 'inversaVelocidadMedia', 'fechaMedicion']"
+            [loading]="loading"
+            [globalFilterFields]="[
+                'nombreHito', 'este', 'norte', 'elevacion', 'horizontalAbsoluto', 
+                'verticalAbsoluto', 'totalAbsoluto', 'acimutAbsoluto', 'buzamientoAbsoluto', 
+                'horizontalRelativo', 'verticalRelativo', 'totalRelativo', 'acimutRelativo', 
+                'buzamientoRelativo', 'horizontalAcumulado', 'velocidadMedia', 'inversaVelocidadMedia', 
+                'fechaMedicion'
+            ]"
             [tableStyle]="{ 'min-width': '150rem' }"
             [scrollable]="true"
             scrollHeight="600px"
@@ -226,3 +265,4 @@
     [visible]="showDialog"
     (close)="closeDialog()"
 ></app-show-medida>
+

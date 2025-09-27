@@ -25,13 +25,16 @@
                                 <i class="pi pi-chevron-down"></i>
                             </div>
                             <ul class="list-none p-0 m-0 overflow-hidden">
-                                <li *ngFor="let item of items">
-                                    <a pRipple [routerLink]="item.routeLink" (click)="closeCallback($event)"
-                                        class="flex items-center cursor-pointer p-4 rounded-border duration-150 transition-colors p-ripple hover:bg-primary-100 dark:hover:bg-primary-200 hover:text-highlight-color dark:hover:text-black">
+                                @for (item of items; track item.routeLink) {
+                                <li>
+                                    <a pRipple [routerLink]="item.routeLink" (click)="onItemSelect(item.routeLink); closeCallback($event)"
+                                        class="flex items-center cursor-pointer p-4 rounded-border duration-150 transition-colors p-ripple hover:bg-primary-100 dark:hover:bg-primary-100 hover:text-highlight-color dark:hover:text-black"
+                                        [ngClass]="{ 'bg-primary-500 dark:bg-primary-500': selectedItem === item.routeLink }">
                                         <i [ngClass]="item.icon + ' mr-2'"></i>
                                         <span class="font-medium">{{ item.label }}</span>
                                     </a>
                                 </li>
+                                }
                             </ul>
                         </li>
                     </ul>

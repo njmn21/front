@@ -1,12 +1,11 @@
-<h2 class="text-4xl font-bold mb-4">Dashboard</h2>
+<h2 class="text-4xl font-bold mb-4">Gráficas</h2>
 
 <div class="space-y-6 w-[86.5vw]">
-    <!-- Botón para descargar gráficos -->
     <div class="flex justify-end mb-4">
         <button class="p-button p-button-primary" (click)="descargarGraficos()">Descargar Gráficos</button>
     </div>
 
-    <!-- Gráfico Horizontal Absoluto -->
+    <!-- Horizontal Absoluto -->
     <div class="card bg-white" id="chartHorizontal">
         @if (loading) {
             <div class="flex justify-center items-center h-[30rem]">
@@ -18,7 +17,7 @@
         }
     </div>
 
-    <!-- Gráfico Vertical Absoluto -->
+    <!-- Vertical Absoluto -->
     <div class="card bg-white" id="chartVertical">
         @if (loading) {
             <div class="flex justify-center items-center h-[30rem]">
@@ -30,7 +29,7 @@
         }
     </div>
 
-    <!-- Gráfico Total Absoluto -->
+    <!-- Total Absoluto -->
     <div class="card bg-white" id="chartTotal">
         @if (loading) {
             <div class="flex justify-center items-center h-[30rem]">
@@ -42,7 +41,7 @@
         }
     </div>
 
-    <!-- Gráfico Este vs Norte -->
+    <!-- Este vs Norte -->
     <div class="card bg-white" id="chartEsteNorte">
         @if (loading) {
             <div class="flex justify-center items-center h-[30rem]">
@@ -54,7 +53,7 @@
         }
     </div>
 
-    <!-- Gráfico Velocidad Media -->
+    <!-- Velocidad Media -->
     <div class="card bg-white" id="chartAverageSpeed">
         @if (loading) {
             <div class="flex justify-center items-center h-[30rem]">

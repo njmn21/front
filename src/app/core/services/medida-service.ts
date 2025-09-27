@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, catchError, throwError } from 'rxjs';
-import { IMedidaGet, IMedidaPost } from '../interfaces/deposito';
+import { IMedidaGet, IMedidaPost, IMaxMedidaGet } from '../interfaces/deposito';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +34,19 @@ export class MedidaService {
           return response.result;
         }),
         catchError(error => {
+          return throwError(() => error);
+        })
+      );
+  }
+
+  getMaxMedidaById(id: number): Observable<IMaxMedidaGet> {
+    const url = `${this.baseUrl}/Tailing/get-max-measurement-by-landmark-id/${id}`;
+
+    return this.http.get<{ result: IMaxMedidaGet }>(url)
+      .pipe(
+        map(response => response.result),
+        catchError(error => {
+          console.error('Error al obtener la medida máxima:', error);
           return throwError(() => error);
         })
       );

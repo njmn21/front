@@ -7,20 +7,22 @@
         [style]="{ width: '25rem' }" 
         (onHide)="cerrar()"
     >
-        <div *ngIf="deposito" class="m-2">
+        @if (deposito) {
+          <div class="m-2">
             <p-floatlabel variant="on" class="w-full mb-3">
-                <input pInputText [value]="deposito.nombreDeposito" class="w-full h-12" readonly />
-                <label>Nombre Depósito</label>
+              <input pInputText [value]="deposito.nombreDeposito" class="w-full h-12" readonly />
+              <label>Nombre Depósito</label>
             </p-floatlabel>
             <p-floatlabel variant="on" class="w-full mb-3">
-                <input pInputText [value]="deposito.ubicacion" class="w-full h-12" readonly />
-                <label>Ubicación</label>
+              <input pInputText [value]="deposito.ubicacion" class="w-full h-12" readonly />
+              <label>Ubicación</label>
             </p-floatlabel>
             <p-floatlabel variant="on" class="w-full mb-3">
-                <input pInputText [value]="deposito.fechaCreacion" class="w-full h-12" readonly />
-                <label>Fecha de Creación</label>
+              <input pInputText [value]="deposito.fechaCreacion" class="w-full h-12" readonly />
+              <label>Fecha de Creación</label>
             </p-floatlabel>
-        </div>
+          </div>
+        }
         <div class="flex justify-end gap-2 mt-4">
             <p-button label="Cerrar" severity="secondary" (click)="cerrar()" />
         </div>

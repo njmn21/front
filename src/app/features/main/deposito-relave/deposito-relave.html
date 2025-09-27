@@ -13,18 +13,22 @@
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th class="w-1/12 text-center">#</th>
-                <th *ngFor="let col of columns" class="w-1/5 text-center">
+                @for (col of columns; track col.header) {
+                  <th class="w-1/5 text-center">
                     {{ col.header }}
-                </th>
+                  </th>
+                }
                 <th class="w-1/5 text-center"></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
             <tr>
                 <td class="w-1/12 text-center">{{ rowIndex + 1 }}</td>
-                <td *ngFor="let col of columns" class="w-1/5 text-center">
+                @for (col of columns; track col.field) {
+                  <td class="w-1/5 text-center">
                     {{ rowData[col.field] ? rowData[col.field] : '-' }}
-                </td>
+                  </td>
+                }
                 <td class="w-1/5">
                     <p-button icon="pi pi-search" severity="secondary" rounded 
                         (click)="abrirShowDeposito(rowData)" />
@@ -34,9 +38,10 @@
     </p-table>
 </div>
 
-<app-show-deposito
-  *ngIf="showDepositoVisible"
-  [deposito]="depositoSeleccionado"
-  [visible]="showDepositoVisible"
-  (close)="showDepositoVisible = false">
-</app-show-deposito>
+@if (showDepositoVisible) {
+  <app-show-deposito
+    [deposito]="depositoSeleccionado"
+    [visible]="showDepositoVisible"
+    (close)="showDepositoVisible = false">
+  </app-show-deposito>
+}
