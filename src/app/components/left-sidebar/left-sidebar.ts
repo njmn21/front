@@ -36,7 +36,7 @@ export class LeftSidebar {
     {
       routeLink: '/registrar',
       icon: 'pi pi-pen-to-square',
-      label: 'Hitos y Medidas'
+      label: 'Hitos y Lecturas'
     }
   ]
 

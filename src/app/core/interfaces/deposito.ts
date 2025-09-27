@@ -23,7 +23,7 @@ export interface IHitoPost {
     DepositoId: number;
 }
 
-export interface IMedidadGet {
+export interface IMedidaGet {
     medicionId: number;
     este: number;
     norte: number;

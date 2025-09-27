@@ -16,8 +16,13 @@
                         class="w-full h-12" />
                     <label for="nombreHito">Nombre Hito</label>
                 </p-floatlabel>
-                <p-select [options]="depositos" formControlName="deposito" optionLabel="nombreDeposito" placeholder="Selecciona un depósito"
-                    class="w-full h-12" [showClear]="true" />
+                <p-select 
+                    [options]="depositos" 
+                    formControlName="deposito" 
+                    optionLabel="nombreDeposito" 
+                    placeholder="Selecciona un depósito"
+                    class="w-full h-12" [showClear]="true" 
+                />
             </div>
             <div class="flex justify-end mt-4">
                 <p-toast />

@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, catchError, throwError } from 'rxjs';
-import { IMedidadGet, IMedidaPost } from '../interfaces/deposito';
+import { IMedidaGet, IMedidaPost } from '../interfaces/deposito';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +13,27 @@ export class MedidaService {
 
   constructor(private http: HttpClient) { }
 
-  getAllMedidas(): Observable<IMedidadGet[]> {
+  getAllMedidas(): Observable<IMedidaGet[]> {
     const url = `${this.baseUrl}/Tailing/get-all-measurements`;
-    return this.http.get<{ result: IMedidadGet[] }>(url)
+    return this.http.get<{ result: IMedidaGet[] }>(url)
       .pipe(
         map(response => response.result),
         catchError(error => {
           console.error('Error al obtener medidas:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  getMedidasById(id: number): Observable<IMedidaGet[]> {
+    const url = `${this.baseUrl}/Tailing/get-measurements-by-landmark-id/${id}`;
+
+    return this.http.get<{ result: IMedidaGet[] }>(url)
+      .pipe(
+        map(response => {
+          return response.result;
+        }),
+        catchError(error => {
           return throwError(() => error);
         })
       );
