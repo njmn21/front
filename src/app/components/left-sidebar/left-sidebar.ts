@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DrawerModule } from 'primeng/drawer';
@@ -7,15 +7,21 @@ import { Ripple } from 'primeng/ripple';
 import { AvatarModule } from 'primeng/avatar';
 import { StyleClass } from 'primeng/styleclass';
 import { Drawer } from 'primeng/drawer';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-left-sidebar',
-  imports: [CommonModule, RouterModule, DrawerModule, ButtonModule, Ripple, AvatarModule, StyleClass],
+  imports: [CommonModule, RouterModule, DrawerModule, ButtonModule, Ripple, AvatarModule, StyleClass, ToggleSwitchModule, FormsModule],
   templateUrl: './left-sidebar.html',
-  styleUrl: './left-sidebar.css'
+  styleUrl: './left-sidebar.css',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class LeftSidebar {
   @ViewChild('drawerRef') drawerRef!: Drawer;
+
+  visible: boolean = true;
+  checked: boolean = false; // Added property for toggle switch
 
   items = [
     {
@@ -38,11 +44,16 @@ export class LeftSidebar {
       icon: 'pi pi-pen-to-square',
       label: 'Hitos y Lecturas'
     }
-  ]
+  ];
 
   closeCallback(e: any): void {
     this.drawerRef.close(e);
   }
 
-  visible: boolean = true;
+  toggleDarkerMode() {
+    const element = document.querySelector('html');
+    if (element) {
+      element.classList.toggle('my-app-dark');
+    }
+  }
 }

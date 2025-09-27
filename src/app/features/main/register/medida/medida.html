@@ -190,7 +190,7 @@
             </tr>
         </ng-template>
         <ng-template #body let-medida let-rowIndex="rowIndex">
-            <tr class="hover:bg-white hover:text-black" (click)="onRowClick(medida)">
+            <tr class="hover:bg-blue-100 hover:text-black" (click)="onRowClick(medida)">
                 <td class="text-center">{{ rowIndex + 1 }}</td>
                 <td class="text-center">{{ medida.nombreHito }}</td>
                 <td class="text-center">{{ medida.fechaMedicion | date:'dd/MM/yyyy' }}</td>
