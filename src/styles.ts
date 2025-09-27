@@ -32,23 +32,29 @@ export const MyPreset = definePreset(Aura, {
             },
             dark: {
                 primary: {
-                    50: '{indigo.50}',
-                    100: '{indigo.100}',
-                    200: '{indigo.200}',
-                    300: '{indigo.300}',
-                    400: '{indigo.400}',
-                    500: '{indigo.500}',
-                    600: '{indigo.600}',
-                    700: '{indigo.700}',
-                    800: '{indigo.800}',
-                    900: '{indigo.900}',
-                    950: '{indigo.950}'
+                    //cambiar a hexadecimal
+                    50: '#d1fae5',
+                    100: '#a7f3d0',
+                    200: '#6ee7b7',
+                    300: '#34d399',
+                    400: '#10b981',
+                    500: '#059669',
+                    600: '#047857',
+                    700: '#065f46',
+                    800: '#064e3b',
+                    900: '#064e3b',
+                    950: '#064e3b'
                 } as ExtendedColorScheme,
                 highlight: {
+                    /*
                     background: 'rgba(250, 250, 250, 0.16)',
                     focusBackground: 'rgba(250, 250, 250, 0.24)',
                     color: 'rgba(250, 250, 250, 0.87)',
-                    focusColor: 'rgba(250, 250, 250, 0.87)'
+                    focusColor: 'rgba(250, 250, 250, 0.87)'*/
+                    background: '#10b981',
+                    focusBackground: '#10b981',
+                    color: '#ffffff',
+                    focusColor: '#ffffff'
                 }
             }
         }
