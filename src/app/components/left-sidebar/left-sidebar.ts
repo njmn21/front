@@ -17,6 +17,8 @@ import { Drawer } from 'primeng/drawer';
 export class LeftSidebar {
   @ViewChild('drawerRef') drawerRef!: Drawer;
 
+  visible: boolean = true;
+
   items = [
     {
       routeLink: '/inicio',
@@ -44,5 +46,10 @@ export class LeftSidebar {
     this.drawerRef.close(e);
   }
 
-  visible: boolean = true;
+  toggleDarkerMode() {
+    const element = document.querySelector('html');
+    if (element) {
+      element.classList.toggle('my-app-dark');
+    }
+  }
 }
