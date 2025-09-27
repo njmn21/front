@@ -17,7 +17,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 
 import { Deposito } from '../../core/services/deposito';
 import { HitoService } from '../../core/services/hito-service';
-import { IHitoPost } from '../../core/interfaces/deposito';
+import { IDepositoGet, IHitoPost } from '../../core/interfaces/deposito';
 
 @Component({
   selector: 'app-form-hito',
@@ -42,8 +42,8 @@ export class FormHito implements OnInit {
   errorMsg: string | null = null
   right: boolean = false;
 
-  depositos: any[] = [];
-  selectedDeposito: any;
+  depositos: IDepositoGet[] = [];
+  selectedDeposito: IDepositoGet | null = null;
   visible2: boolean = false;
   hitoForm!: FormGroup;
   loading: boolean = false;
@@ -63,7 +63,7 @@ export class FormHito implements OnInit {
       nombreHito: ['', Validators.required],
       deposito: [null, Validators.required]
     });
-    this.depositoService.getAllDepositos().subscribe((depositos: any[]) => {
+    this.depositoService.getAllDepositos().subscribe((depositos: IDepositoGet[]) => {
       this.depositos = depositos;
     });
   }

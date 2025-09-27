@@ -8,25 +8,61 @@
 
     <!-- Gráfico Horizontal Absoluto -->
     <div class="card bg-white" id="chartHorizontal">
-        <div *ngIf="loading" class="flex justify-center items-center h-[30rem]">
-            <div class="text-black text-lg">Cargando datos...</div>
-        </div>
-        <p-chart *ngIf="!loading" type="line" [data]="data" [options]="options" class="h-[30rem]" />
+        @if (loading) {
+            <div class="flex justify-center items-center h-[30rem]">
+                <div class="text-black text-lg">Cargando datos...</div>
+            </div>
+        }
+        @if (!loading) {
+            <p-chart type="line" [data]="data" [options]="options" class="h-[30rem]" />
+        }
     </div>
 
     <!-- Gráfico Vertical Absoluto -->
     <div class="card bg-white" id="chartVertical">
-        <div *ngIf="loading" class="flex justify-center items-center h-[30rem]">
-            <div class="text-black text-lg">Cargando datos...</div>
-        </div>
-        <p-chart *ngIf="!loading" type="line" [data]="dataVertical" [options]="optionsVertical" class="h-[30rem]" />
+        @if (loading) {
+            <div class="flex justify-center items-center h-[30rem]">
+                <div class="text-black text-lg">Cargando datos...</div>
+            </div>
+        }
+        @if (!loading) {
+            <p-chart type="line" [data]="dataVertical" [options]="optionsVertical" class="h-[30rem]" />
+        }
     </div>
 
     <!-- Gráfico Total Absoluto -->
     <div class="card bg-white" id="chartTotal">
-        <div *ngIf="loading" class="flex justify-center items-center h-[30rem]">
-            <div class="text-black text-lg">Cargando datos...</div>
-        </div>
-        <p-chart *ngIf="!loading" type="line" [data]="dataTotal" [options]="optionsTotal" class="h-[30rem]" />
+        @if (loading) {
+            <div class="flex justify-center items-center h-[30rem]">
+                <div class="text-black text-lg">Cargando datos...</div>
+            </div>
+        }
+        @if (!loading) {
+            <p-chart type="line" [data]="dataTotal" [options]="optionsTotal" class="h-[30rem]" />
+        }
+    </div>
+
+    <!-- Gráfico Este vs Norte -->
+    <div class="card bg-white" id="chartEsteNorte">
+        @if (loading) {
+            <div class="flex justify-center items-center h-[30rem]">
+                <div class="text-black text-lg">Cargando datos...</div>
+            </div>
+        }
+        @if (!loading) {
+            <p-chart type="scatter" [data]="dataEsteNorte" [options]="optionsEsteNorte" class="h-[30rem]" />
+        }
+    </div>
+
+    <!-- Gráfico Velocidad Media -->
+    <div class="card bg-white" id="chartAverageSpeed">
+        @if (loading) {
+            <div class="flex justify-center items-center h-[30rem]">
+                <div class="text-black text-lg">Cargando datos...</div>
+            </div>
+        }
+        @if (!loading) {
+            <p-chart type="line" [data]="dataAverageSpeed" [options]="optionsAverageSpeed" class="h-[30rem]" />
+        }
     </div>
 </div>

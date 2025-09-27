@@ -70,27 +70,6 @@ export class FormMedida implements OnInit {
     this.medidaForm.reset();
   }
 
-  submitForm() {
-    const formValue = this.medidaForm.value;
-    const medida: IMedidaPost = {
-      Este: parseFloat(formValue.Este),
-      Norte: parseFloat(formValue.Norte),
-      Elevacion: parseFloat(formValue.Elevacion),
-      FechaMedicion: formValue.FechaMedicion.toISOString().split('T')[0],
-      HitoId: this.hitoId,
-      EsBase: formValue.checked || false
-    }
-
-    this.medidaService.addMeasurement(medida).subscribe({
-      next: (response) => {
-        // Manejo de respuesta exitosa
-      },
-      error: (error) => {
-        // Manejo de errores
-      }
-    });
-  }
-
   confirm(event?: Event) {
     this.confirmationService.confirm({
       target: event?.target as EventTarget,
@@ -124,7 +103,21 @@ export class FormMedida implements OnInit {
             this.medidaCreada.emit('La medida fue creada exitosamente.');
           },
           error: (error) => {
-            this.errorMsg = 'Error al crear la medida. Intente nuevamente.';
+            if (error.status === 400 && error.error?.message) {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: error.error.message,
+                life: 5000
+              });
+            } else {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Error al crear la medida. Intente nuevamente.',
+                life: 5000
+              });
+            }
           }
         });
       },

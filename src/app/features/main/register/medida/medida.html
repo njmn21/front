@@ -1,5 +1,17 @@
 <div class="flex items-center justify-between mt-8">
-    <h2 class="text-2xl font-bold m-0">Medidas</h2>
+    <h2 class="text-2xl font-bold m-0">Lecturas</h2>
+
+    <div class="card flex justify-center items-center ml-4">
+        <p-select 
+            [options]="hitos" 
+            [(ngModel)]="selectedHitos"
+            optionLabel="nombreHito"
+            placeholder="Seleccione un Hito" 
+            [editable]="true" 
+            class="w-full md:w-56"
+            (onChange)="onHitoChange($event)" 
+        />
+    </div>
 </div>
 
 <div class="card pt-4 pb-4 w-[88vw]">
@@ -23,6 +35,7 @@
             <tr>
                 <th rowspan="2" style="width:4%" class="text-center">#</th>
                 <th rowspan="2" style="width:6%" class="text-center">Hito</th>
+                <th rowspan="2" style="width:7%" class="text-center">Fecha</th>
                 <th rowspan="2" style="width:6%" class="text-center">Este</th>
                 <th rowspan="2" style="width:6%" class="text-center">Norte</th>
                 <th rowspan="2" style="width:6%" class="text-center">Elevación</th>
@@ -31,7 +44,6 @@
                 <th rowspan="2" style="width:6%" class="text-center">H. Acumulado</th>
                 <th rowspan="2" style="width:6%" class="text-center">Vel. Media</th>
                 <th rowspan="2" style="width:6%" class="text-center">Inv. Vel. Media</th>
-                <th rowspan="2" style="width:7%" class="text-center">Fecha</th>
             </tr>
             <tr>
                 <th style="width:4%;" class="text-center">Horizontal</th>
@@ -53,6 +65,13 @@
                     <p-columnFilter type="text" field="nombreHito" placeholder="Hito" ariaLabel="Filter Hito">
                         <ng-template #filter let-value let-filter="filterCallback">
                             <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="Hito" style="width: 70px; font-size: 11px; padding: 2px;" />
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="fechaMedicion" placeholder="Año" ariaLabel="Filter Año">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <input pInputText type="number" [ngModel]="value" (input)="filter($event.target.value)" placeholder="Año" style="width: 80px; font-size: 11px; padding: 2px;" />
                         </ng-template>
                     </p-columnFilter>
                 </th>
@@ -168,19 +187,13 @@
                         </ng-template>
                     </p-columnFilter>
                 </th>
-                <th>
-                    <p-columnFilter type="text" field="fechaMedicion" placeholder="Fecha" ariaLabel="Filter Fecha">
-                        <ng-template #filter let-value let-filter="filterCallback">
-                            <input pInputText type="text" [ngModel]="value" (input)="filter($event.target.value)" placeholder="Fecha" style="width: 80px; font-size: 11px; padding: 2px;" />
-                        </ng-template>
-                    </p-columnFilter>
-                </th>
             </tr>
         </ng-template>
         <ng-template #body let-medida let-rowIndex="rowIndex">
-            <tr class="hover:bg-white hover:text-black">
+            <tr class="hover:bg-white hover:text-black" (click)="onRowClick(medida)">
                 <td class="text-center">{{ rowIndex + 1 }}</td>
                 <td class="text-center">{{ medida.nombreHito }}</td>
+                <td class="text-center">{{ medida.fechaMedicion | date:'dd/MM/yyyy' }}</td>
                 <td class="text-center">{{ medida.este | number:'1.2-2' }}</td>
                 <td class="text-center">{{ medida.norte | number:'1.2-2' }}</td>
                 <td class="text-center">{{ medida.elevacion | number:'1.2-2' }}</td>
@@ -197,7 +210,6 @@
                 <td class="text-center">{{ medida.horizontalAcumulado | number:'1.2-2' }}</td>
                 <td class="text-center">{{ medida.velocidadMedia | number:'1.2-2' }}</td>
                 <td class="text-center">{{ medida.inversaVelocidadMedia | number:'1.2-2' }}</td>
-                <td class="text-center">{{ medida.fechaMedicion | date:'dd/MM/yyyy' }}</td>
             </tr>
         </ng-template>
         <ng-template #emptymessage> 
@@ -208,3 +220,9 @@
         </p-table>
     </div>
 </div>
+
+<app-show-medida
+    [medida]="selectedMedida"
+    [visible]="showDialog"
+    (close)="closeDialog()"
+></app-show-medida>

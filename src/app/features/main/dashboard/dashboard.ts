@@ -2,9 +2,42 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import html2canvas from 'html2canvas';
+import { Chart } from 'chart.js';
 
 import { MedidaService } from '../../../core/services/medida-service';
-import { IMedidadGet } from '../../../core/interfaces/deposito';
+import { IMedidaGet } from '../../../core/interfaces/deposito';
+import { chartOptions, generateChartOptions } from './chart-options';
+import { DataProcessingService } from '../../../core/services/data-processing.service';
+
+
+Chart.register({
+  id: 'backgroundZonesTotal',
+  beforeDraw: (chart: any) => {
+    if (chart.config.options.plugins.backgroundZonesEnabled) {
+      const ctx = chart.ctx;
+      const yScale = chart.scales.y;
+      const zones = [
+        { from: 0, to: 5, color: 'rgba(0, 255, 0, 0.2)' },
+        { from: 5, to: 15, color: 'rgba(255, 255, 0, 0.2)' },
+        { from: 15, to: 25, color: 'rgba(255, 165, 0, 0.2)' },
+        { from: 25, to: 30, color: 'rgba(255, 0, 0, 0.2)' }
+      ];
+
+      zones.forEach(zone => {
+        const yStart = yScale.getPixelForValue(zone.from);
+        const yEnd = yScale.getPixelForValue(zone.to);
+
+        ctx.fillStyle = zone.color;
+        ctx.fillRect(
+          chart.chartArea.left,
+          yEnd,
+          chart.chartArea.right - chart.chartArea.left,
+          yStart - yEnd
+        );
+      });
+    }
+  }
+});
 
 @Component({
   selector: 'app-dashboard',
@@ -19,9 +52,17 @@ export class Dashboard {
   optionsVertical: any;
   dataTotal: any;
   optionsTotal: any;
+  dataEsteNorte: any;
+  optionsEsteNorte: any;
+  dataAverageSpeed: any;
+  optionsAverageSpeed: any;
   loading: boolean = true;
 
-  constructor(private cd: ChangeDetectorRef, private medidaService: MedidaService) { }
+  constructor(
+    private cd: ChangeDetectorRef,
+    private medidaService: MedidaService,
+    private dataProcessingService: DataProcessingService
+  ) { }
 
   ngOnInit() {
     this.loadMedidasData();
@@ -30,7 +71,7 @@ export class Dashboard {
   loadMedidasData() {
     this.loading = true;
     this.medidaService.getAllMedidas().subscribe({
-      next: (medidas: IMedidadGet[]) => {
+      next: (medidas: IMedidaGet[]) => {
         this.processDataForChart(medidas);
         this.loading = false;
       },
@@ -43,150 +84,94 @@ export class Dashboard {
     });
   }
 
-  processDataForChart(medidas: IMedidadGet[]) {
-    // Ordenar medidas por fecha
-    const medidasOrdenadas = medidas.sort((a, b) =>
-      new Date(a.fechaMedicion).getTime() - new Date(b.fechaMedicion).getTime()
-    );
+  // Extraer lógica repetitiva de creación de datasets en una función reutilizable
+  private createDataset(
+    medidasPorHito: { [key: string]: IMedidaGet[] },
+    fechasUnicas: string[],
+    key: keyof IMedidaGet,
+    colores: string[]): any[] {
+    return Object.keys(medidasPorHito).map((nombreHito, index) => {
+      const datosHito = medidasPorHito[nombreHito];
+      const color = colores[index % colores.length];
 
-    // Agrupar medidas por nombreHito
-    const medidasPorHito = medidasOrdenadas.reduce((acc, medida) => {
-      if (!acc[medida.nombreHito]) {
-        acc[medida.nombreHito] = [];
-      }
-      acc[medida.nombreHito].push(medida);
-      return acc;
-    }, {} as { [key: string]: IMedidadGet[] });
-
-    // Obtener todas las fechas únicas ordenadas
-    const fechasUnicas = [...new Set(medidasOrdenadas.map(medida => {
-      const fecha = new Date(medida.fechaMedicion);
-      fecha.setDate(fecha.getDate() + 1);
-      return fecha.toLocaleDateString('es-ES', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
+      const data = fechasUnicas.map(fecha => {
+        const medida = datosHito.find(m => {
+          const fechaMedida = new Date(m.fechaMedicion);
+          fechaMedida.setDate(fechaMedida.getDate() + 1);
+          return fechaMedida.toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+          }) === fecha;
+        });
+        return medida ? medida[key] : null;
       });
-    }))];
 
-    // Colores para diferentes hitos
+      return {
+        label: nombreHito,
+        data: data,
+        fill: false,
+        borderColor: color,
+        backgroundColor: color + '20',
+        tension: 0,
+        pointBackgroundColor: color,
+        pointBorderColor: color,
+        pointRadius: 4,
+        spanGaps: false
+      };
+    });
+  }
+
+  processDataForChart(medidas: IMedidaGet[]) {
+    const { medidasPorHito, fechasUnicas } = this.dataProcessingService.processMedidas(medidas);
+
     const colores = [
       '#42A5F5', '#66BB6A', '#FF7043', '#AB47BC', '#26A69A',
       '#FFA726', '#EF5350', '#5C6BC0', '#FFCA28', '#78909C'
     ];
 
-    // Crear datasets para cada hito - Horizontal Absoluto
-    const datasetsHorizontal = Object.keys(medidasPorHito).map((nombreHito, index) => {
-      const datosHito = medidasPorHito[nombreHito];
-      const color = colores[index % colores.length];
-
-      const data = fechasUnicas.map(fecha => {
-        const medida = datosHito.find(m => {
-          const fechaMedida = new Date(m.fechaMedicion);
-          fechaMedida.setDate(fechaMedida.getDate() + 1);
-          return fechaMedida.toLocaleDateString('es-ES', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-          }) === fecha;
-        });
-        return medida ? medida.horizontalAbsoluto : null;
-      });
-
-      return {
-        label: nombreHito,
-        data: data,
-        fill: false,
-        borderColor: color,
-        backgroundColor: color + '20',
-        tension: 0, //cambiar la forma de la linea 0.4
-        pointBackgroundColor: color,
-        pointBorderColor: color,
-        pointRadius: 6,
-        spanGaps: false
-      };
-    });
-
-    // Crear datasets para cada hito - Vertical Absoluto
-    const datasetsVertical = Object.keys(medidasPorHito).map((nombreHito, index) => {
-      const datosHito = medidasPorHito[nombreHito];
-      const color = colores[index % colores.length];
-
-      const data = fechasUnicas.map(fecha => {
-        const medida = datosHito.find(m => {
-          const fechaMedida = new Date(m.fechaMedicion);
-          fechaMedida.setDate(fechaMedida.getDate() + 1);
-          return fechaMedida.toLocaleDateString('es-ES', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-          }) === fecha;
-        });
-        return medida ? medida.verticalAbsoluto : null;
-      });
-
-      return {
-        label: nombreHito,
-        data: data,
-        fill: false,
-        borderColor: color,
-        backgroundColor: color + '20',
-        tension: 0, //cambiar la forma de la linea 0.4
-        pointBackgroundColor: color,
-        pointBorderColor: color,
-        pointRadius: 6,
-        spanGaps: false
-      };
-    });
-
-    // Crear datasets para cada hito - Total Absoluto
-    const datasetsTotal = Object.keys(medidasPorHito).map((nombreHito, index) => {
-      const datosHito = medidasPorHito[nombreHito];
-      const color = colores[index % colores.length];
-
-      const data = fechasUnicas.map(fecha => {
-        const medida = datosHito.find(m => {
-          const fechaMedida = new Date(m.fechaMedicion);
-          fechaMedida.setDate(fechaMedida.getDate() + 1);
-          return fechaMedida.toLocaleDateString('es-ES', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-          }) === fecha;
-        });
-        return medida ? medida.totalAbsoluto : null;
-      });
-
-      return {
-        label: nombreHito,
-        data: data,
-        fill: false,
-        borderColor: color,
-        backgroundColor: color + '20',
-        tension: 0, //cambiar la forma de la linea 0.4
-        pointBackgroundColor: color,
-        pointBorderColor: color,
-        pointRadius: 6,
-        spanGaps: false
-      };
-    });
-
-    // Primer gráfico - Horizontal Absoluto
     this.data = {
       labels: fechasUnicas,
-      datasets: datasetsHorizontal
+      datasets: this.createDataset(medidasPorHito, fechasUnicas, 'horizontalAbsoluto', colores)
     };
 
-    // Segundo gráfico - Vertical Absoluto
     this.dataVertical = {
       labels: fechasUnicas,
-      datasets: datasetsVertical
+      datasets: this.createDataset(medidasPorHito, fechasUnicas, 'verticalAbsoluto', colores)
     };
 
-    // Tercer gráfico - Total Absoluto
     this.dataTotal = {
       labels: fechasUnicas,
-      datasets: datasetsTotal
+      datasets: this.createDataset(medidasPorHito, fechasUnicas, 'totalAbsoluto', colores)
+    };
+
+    this.dataEsteNorte = {
+      datasets: Object.keys(medidasPorHito).map((nombreHito, index) => {
+        const datosHito = medidasPorHito[nombreHito];
+        const color = colores[index % colores.length];
+
+        return {
+          label: nombreHito,
+          data: datosHito.map((medida, i) => ({
+            x: medida.este,
+            y: medida.norte
+          })),
+          fill: false,
+          borderColor: color,
+          backgroundColor: color + '20',
+          tension: 0,
+          pointRadius: datosHito.map((_, i) => (i === 0 || i === datosHito.length - 1 ? 4 : 0)),
+          pointBackgroundColor: datosHito.map((_, i) => (i === 0 ? 'orange' : i === datosHito.length - 1 ? 'red' : color)),
+          pointBorderColor: datosHito.map((_, i) => (i === 0 ? 'orange' : i === datosHito.length - 1 ? 'red' : color)),
+          showLine: true,
+        };
+      })
+    };
+
+    // New chart for average speed
+    this.dataAverageSpeed = {
+      labels: fechasUnicas,
+      datasets: this.createDataset(medidasPorHito, fechasUnicas, 'velocidadMedia', colores)
     };
 
     this.initChartOptions();
@@ -199,7 +184,7 @@ export class Dashboard {
       labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'],
       datasets: [
         {
-          label: 'Horizontal Absoluto',
+          label: 'Desplazamiento Horizontal Absoluto (cm)',
           data: [0.12, 0.19, 0.03, 0.05, 0.02, 0.03, 0.07],
           fill: false,
           borderColor: '#42A5F5',
@@ -207,7 +192,7 @@ export class Dashboard {
           tension: 0, //cambiar la forma de la linea 0.4
           pointBackgroundColor: '#42A5F5',
           pointBorderColor: '#42A5F5',
-          pointRadius: 6
+          pointRadius: 4
         }
       ]
     };
@@ -224,7 +209,7 @@ export class Dashboard {
           tension: 0, //cambiar la forma de la linea 0.4
           pointBackgroundColor: '#66BB6A',
           pointBorderColor: '#66BB6A',
-          pointRadius: 6
+          pointRadius: 4
         }
       ]
     };
@@ -241,7 +226,7 @@ export class Dashboard {
           tension: 0, //cambiar la forma de la linea 0.4
           pointBackgroundColor: '#FF7043',
           pointBorderColor: '#FF7043',
-          pointRadius: 6
+          pointRadius: 4
         }
       ]
     };
@@ -249,235 +234,64 @@ export class Dashboard {
   }
 
   initChartOptions() {
-    this.options = {
-      maintainAspectRatio: false,
-      aspectRatio: 0.6,
-      plugins: {
-        legend: {
-          display: true,
-          position: 'top',
-          labels: {
-            color: '#000000',
-            usePointStyle: true,
-            padding: 20,
-            font: {
-              size: 14,
-              weight: 'bold'
-            }
-          }
-        },
-        title: {
-          display: true,
-          text: 'Desplazamientos Horizontales Absolutos',
-          color: '#000000',
-          font: {
-            size: 16
-          }
-        }
-      },
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'Fecha de Medición',
-            color: '#000000'
-          },
-          ticks: {
-            color: '#000000'
-          },
-          grid: {
-            color: 'rgba(0, 0, 0, 0.2)',
-            drawBorder: false
-          }
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Horizontal Absoluto',
-            color: '#000000'
-          },
-          ticks: {
-            color: '#000000'
-          },
-          grid: {
-            color: 'rgba(0, 0, 0, 0.2)',
-            drawBorder: false
-          }
-        }
-      },
-      interaction: {
-        intersect: false,
-        mode: 'index'
-      }
-    };
+    const baseOptions = chartOptions.baseOptions;
 
-    this.optionsVertical = {
-      maintainAspectRatio: false,
-      aspectRatio: 0.6,
-      plugins: {
-        legend: {
-          display: true,
-          position: 'top',
-          labels: {
-            color: '#000000',
-            usePointStyle: true,
-            padding: 20,
-            font: {
-              size: 14,
-              weight: 'bold'
-            }
-          }
-        },
-        title: {
-          display: true,
-          text: 'Desplazamientos Verticales Absolutos',
-          color: '#000000',
-          font: {
-            size: 16
-          }
-        }
-      },
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'Fecha de Medición',
-            color: '#000000'
-          },
-          ticks: {
-            color: '#000000'
-          },
-          grid: {
-            color: 'rgba(0, 0, 0, 0.2)',
-            drawBorder: false
-          }
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Vertical Absoluto',
-            color: '#000000'
-          },
-          ticks: {
-            color: '#000000'
-          },
-          grid: {
-            color: 'rgba(0, 0, 0, 0.2)',
-            drawBorder: false
-          }
-        }
-      },
-      interaction: {
-        intersect: false,
-        mode: 'index'
-      }
-    };
-
+    this.options = generateChartOptions(baseOptions, chartOptions.horizontal.title, chartOptions.horizontal.yAxisTitle, 30);
+    this.optionsVertical = generateChartOptions(baseOptions, chartOptions.vertical.title, chartOptions.vertical.yAxisTitle, 30);
+    this.optionsVertical.scales.y.min = -5;
     this.optionsTotal = {
-      maintainAspectRatio: false,
-      aspectRatio: 0.6,
+      ...generateChartOptions(baseOptions, chartOptions.total.title.join(' '), chartOptions.total.yAxisTitle, chartOptions.total.max),
+      plugins: {
+        backgroundZonesEnabled: true
+      }
+    };
+    this.optionsEsteNorte = {
       plugins: {
         legend: {
           display: true,
-          position: 'top',
-          labels: {
-            color: '#000000',
-            usePointStyle: true,
-            padding: 20,
-            font: {
-              size: 14,
-              weight: 'bold'
-            }
-          }
-        },
-        title: {
-          display: true,
-          text: ['Desplazamientos Totales Absolutos', 'Zonas: Verde (0-5), Amarillo (5-15), Naranja (15-25), Rosa (25-30)'],
-          color: '#000000',
-          font: {
-            size: 16
-          },
-          padding: {
-            top: 10,
-            bottom: 10
-          }
+          position: 'top'
         }
       },
       scales: {
         x: {
           title: {
             display: true,
-            text: 'Fecha de Medición',
-            color: '#000000'
-          },
-          ticks: {
-            color: '#000000'
-          },
-          grid: {
-            color: 'rgba(0, 0, 0, 0.2)',
-            drawBorder: false
+            text: chartOptions.esteNorte.xAxisTitle
           }
         },
         y: {
           title: {
             display: true,
-            text: 'Total Absoluto',
-            color: '#000000'
-          },
-          ticks: {
-            color: '#000000'
-          },
-          grid: {
-            color: 'rgba(0, 0, 0, 0.2)',
-            drawBorder: false
-          },
-          max: 30
-        }
-      },
-      interaction: {
-        intersect: false,
-        mode: 'index'
-      },
-      animation: {
-        onComplete: function (animation: any) {
-          const chart = animation.chart;
-          const ctx = chart.ctx;
-          const chartArea = chart.chartArea;
-
-          if (chartArea && chart.scales.y) {
-            const yAxis = chart.scales.y;
-
-            // Definir las zonas con valores fijos basados en la imagen de referencia
-            const zones = [
-              { start: 30, end: 25, color: 'rgba(255, 182, 193, 0.6)' }, // Rosa - valores altos (25-30)
-              { start: 25, end: 15, color: 'rgba(255, 218, 185, 0.6)' }, // Naranja - valores medios-altos (15-25)
-              { start: 15, end: 5, color: 'rgba(255, 255, 224, 0.6)' }, // Amarillo - valores medios (5-15)
-              { start: 5, end: 0, color: 'rgba(175, 238, 238, 0.6)' } // Verde claro - valores bajos (0-5)
-            ];
-
-            // Dibujar las zonas de fondo
-            zones.forEach(zone => {
-              const startY = yAxis.getPixelForValue(zone.start);
-              const endY = yAxis.getPixelForValue(zone.end);
-
-              // Solo dibujar si los valores están dentro del rango visible del gráfico
-              if (zone.start >= yAxis.min && zone.end <= yAxis.max) {
-                ctx.save();
-                ctx.globalCompositeOperation = 'destination-over';
-                ctx.fillStyle = zone.color;
-                ctx.fillRect(chartArea.left, startY, chartArea.right - chartArea.left, endY - startY);
-                ctx.restore();
-              }
-            });
+            text: chartOptions.esteNorte.yAxisTitle
           }
         }
       }
     };
+
+    // Options for average speed chart
+    this.optionsAverageSpeed = generateChartOptions(baseOptions, 'Velocidad Media', 'Velocidad Media (m/s)', 6);
+    this.optionsAverageSpeed.scales.y.min = 0;
+    this.optionsAverageSpeed.scales.y.ticks.stepSize = 1;
+
     this.cd.markForCheck();
   }
 
+  // Refactorizar método descargarGraficos
+  private captureChart(chartElement: HTMLElement, id: string): void {
+    html2canvas(chartElement, { useCORS: true, willReadFrequently: true } as any)
+      .then((canvas: HTMLCanvasElement) => {
+        const link = document.createElement('a');
+        link.download = `${id}.jpg`;
+        link.href = canvas.toDataURL('image/jpeg');
+        link.click();
+      })
+      .catch((error: any) => {
+        console.error(`Error al capturar el gráfico ${id}:`, error);
+      });
+  }
+
   descargarGraficos() {
-    const ids = ['chartHorizontal', 'chartVertical', 'chartTotal'];
+    const ids = ['chartHorizontal', 'chartVertical', 'chartTotal', 'chartEsteNorte'];
 
     ids.forEach((id) => {
       const chartElement = document.getElementById(id);
@@ -487,15 +301,7 @@ export class Dashboard {
       }
 
       try {
-        // Usar html2canvas para capturar el contenedor completo del gráfico
-        html2canvas(chartElement, { useCORS: true, willReadFrequently: true } as any).then((canvas: HTMLCanvasElement) => {
-          const link = document.createElement('a');
-          link.download = `${id}.jpg`;
-          link.href = canvas.toDataURL('image/jpeg');
-          link.click();
-        }).catch((error: any) => {
-          console.error(`Error al capturar el gráfico ${id}:`, error);
-        });
+        this.captureChart(chartElement, id);
       } catch (error) {
         console.error(`Error inesperado al procesar el gráfico ${id}:`, error);
       }
