@@ -5,6 +5,9 @@ import { Register } from './register/register';
 import { Hito } from './register/hito/hito';
 import { DepositoRelave } from './deposito-relave/deposito-relave';
 import { Medida } from './register/medida/medida';
+import { Desplazamiento } from './dashboard/desplazamiento/desplazamiento';
+import { Trayectoria } from './dashboard/trayectoria/trayectoria';
+import { Velocidad } from './dashboard/velocidad/velocidad';
 
 export const MAIN_ROUTES: Routes = [
     {
@@ -13,7 +16,13 @@ export const MAIN_ROUTES: Routes = [
     },
     {
         path: 'dashboard',
-        component: Dashboard
+        component: Dashboard,
+        children: [
+            { path: '', redirectTo: 'desplazamiento', pathMatch: 'full' },
+            { path: 'desplazamiento', component: Desplazamiento },
+            { path: 'trayectoria', component: Trayectoria },
+            { path: 'velocidad', component: Velocidad },
+        ]
     },
     {
         path: 'deposito-relave',

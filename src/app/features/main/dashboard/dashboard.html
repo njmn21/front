@@ -1,67 +1,7 @@
 <h2 class="text-4xl font-bold mb-4">Gráficas</h2>
 
-<div class="space-y-6 w-[86.5vw]">
-    <div class="flex justify-end mb-4">
-        <button class="p-button p-button-primary" (click)="descargarGraficos()">Descargar Gráficos</button>
-    </div>
-
-    <!-- Horizontal Absoluto -->
-    <div class="card bg-white" id="chartHorizontal">
-        @if (loading) {
-            <div class="flex justify-center items-center h-[30rem]">
-                <div class="text-black text-lg">Cargando datos...</div>
-            </div>
-        }
-        @if (!loading) {
-            <p-chart type="line" [data]="data" [options]="options" class="h-[30rem]" />
-        }
-    </div>
-
-    <!-- Vertical Absoluto -->
-    <div class="card bg-white" id="chartVertical">
-        @if (loading) {
-            <div class="flex justify-center items-center h-[30rem]">
-                <div class="text-black text-lg">Cargando datos...</div>
-            </div>
-        }
-        @if (!loading) {
-            <p-chart type="line" [data]="dataVertical" [options]="optionsVertical" class="h-[30rem]" />
-        }
-    </div>
-
-    <!-- Total Absoluto -->
-    <div class="card bg-white" id="chartTotal">
-        @if (loading) {
-            <div class="flex justify-center items-center h-[30rem]">
-                <div class="text-black text-lg">Cargando datos...</div>
-            </div>
-        }
-        @if (!loading) {
-            <p-chart type="line" [data]="dataTotal" [options]="optionsTotal" class="h-[30rem]" />
-        }
-    </div>
-
-    <!-- Este vs Norte -->
-    <div class="card bg-white" id="chartEsteNorte">
-        @if (loading) {
-            <div class="flex justify-center items-center h-[30rem]">
-                <div class="text-black text-lg">Cargando datos...</div>
-            </div>
-        }
-        @if (!loading) {
-            <p-chart type="scatter" [data]="dataEsteNorte" [options]="optionsEsteNorte" class="h-[30rem]" />
-        }
-    </div>
-
-    <!-- Velocidad Media -->
-    <div class="card bg-white" id="chartAverageSpeed">
-        @if (loading) {
-            <div class="flex justify-center items-center h-[30rem]">
-                <div class="text-black text-lg">Cargando datos...</div>
-            </div>
-        }
-        @if (!loading) {
-            <p-chart type="line" [data]="dataAverageSpeed" [options]="optionsAverageSpeed" class="h-[30rem]" />
-        }
-    </div>
+<div class="card">
+    <p-menubar [model]="items" />
 </div>
+
+<router-outlet></router-outlet>

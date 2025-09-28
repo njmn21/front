@@ -1,0 +1,50 @@
+<h3 class="text-3xl font-bold p-4 ">Desplazamiento</h3>
+
+<div class="card flex justify-end pb-2">
+    <p-multiselect 
+        [options]="hitos" 
+        [(ngModel)]="selectedHitos" 
+        optionLabel="nombreHito"
+        placeholder="Selecione Hitos" 
+        display="chip" 
+        class="w-full md:w-80" 
+    />
+</div>
+
+<div class="space-y-6 w-[88.5vw] py-6">
+    <!-- Horizontal Absoluto -->
+    <div class="card bg-white border rounded-border" id="chartHorizontal">
+        @if (loading) {
+            <div class="flex justify-center items-center h-[30rem]">
+                <div class="text-black text-lg">Cargando datos...</div>
+            </div>
+        }
+        @if (!loading) {
+            <p-chart type="line" [data]="data" [options]="options" class="h-[30rem]" />
+        }
+    </div>
+
+    <!-- Vertical Absoluto -->
+    <div class="card bg-white border rounded-border" id="chartVertical">
+        @if (loading) {
+            <div class="flex justify-center items-center h-[30rem]">
+                <div class="text-black text-lg">Cargando datos...</div>
+            </div>
+        }
+        @if (!loading) {
+            <p-chart type="line" [data]="dataVertical" [options]="optionsVertical" class="h-[30rem]" />
+        }
+    </div>
+
+    <!-- Total Absoluto -->
+    <div class="card bg-white border rounded-border" id="chartTotal">
+        @if (loading) {
+            <div class="flex justify-center items-center h-[30rem]">
+                <div class="text-black text-lg">Cargando datos...</div>
+            </div>
+        }
+        @if (!loading) {
+            <p-chart type="line" [data]="dataTotal" [options]="optionsTotal" class="h-[30rem]" />
+        }
+    </div>
+</div>

@@ -31,11 +31,6 @@ export class LeftSidebar {
       label: 'Inicio'
     },
     {
-      routeLink: '/dashboard',
-      icon: 'pi pi-fw pi-chart-bar',
-      label: 'Gráficas'
-    },
-    {
       routeLink: '/deposito-relave',
       icon: 'pi pi-fw pi-box',
       label: 'Depósito Relaves'
@@ -44,7 +39,12 @@ export class LeftSidebar {
       routeLink: '/registrar',
       icon: 'pi pi-pen-to-square',
       label: 'Hitos y Lecturas'
-    }
+    },
+    {
+      routeLink: '/dashboard',
+      icon: 'pi pi-fw pi-chart-bar',
+      label: 'Gráficas'
+    },
   ];
 
   closeCallback(e: any): void {
