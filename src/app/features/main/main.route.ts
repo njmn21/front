@@ -34,7 +34,7 @@ export const MAIN_ROUTES: Routes = [
         children: [
             { path: '', redirectTo: 'hito', pathMatch: 'full' },
             { path: 'hito', component: Hito },
-            { path: 'medida', component: Medida },
+            { path: 'lecturas', component: Medida },
         ]
     },
     { path: '**', redirectTo: 'inicio' }

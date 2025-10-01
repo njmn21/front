@@ -22,7 +22,7 @@ export class Register implements OnInit {
       {
         label: 'Lecturas',
         icon: 'pi pi-list-check',
-        routerLink: ['medida']
+        routerLink: ['lecturas']
       }
     ]
   }

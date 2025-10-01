@@ -3,13 +3,15 @@ import { FormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ChartModule } from 'primeng/chart';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ButtonModule } from 'primeng/button';
 
 import { MedidaService } from '../../../../core/services/medida-service';
 import { DataProcessingService } from '../../../../core/services/data-processing.service';
 import { HitoSharedService } from '../../../../core/services/hito-shared.service';
 import { IHitoGet, IMedidaGet } from '../../../../core/interfaces/deposito';
+import { chartConfig } from '../../../../core/config/chart-config';
 
 @Component({
   selector: 'app-trayectoria',
@@ -26,12 +28,13 @@ import { IHitoGet, IMedidaGet } from '../../../../core/interfaces/deposito';
 export class Trayectoria implements OnInit, OnDestroy {
 
   hitos: IHitoGet[] = [];
-  selectedHitos: IHitoGet | null = null;
-  private subscription: Subscription = new Subscription();
+  selectedHitos: IHitoGet[] = [];
+  private destroy$ = new Subject<void>();
 
   dataEsteNorte: any;
   optionsEsteNorte: any;
   loading: boolean = true;
+  showClearButton: boolean = false;
 
   constructor(
     private medidaService: MedidaService,
@@ -41,43 +44,97 @@ export class Trayectoria implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.subscription.add(
-      this.hitoSharedService.hitos$.subscribe(hitos => {
+    this.hitoSharedService.hitos$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(hitos => {
         this.hitos = hitos;
-        this.loadMedidasData();
-      })
-    );
+        this.initChart();
+        this.loading = false;
+      });
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  generateCharts() {
+    if (!this.selectedHitos || this.selectedHitos.length === 0) {
+      return;
+    }
+
+    this.loading = true;
+    const hitoIds = this.selectedHitos.map(hito => hito.hitoId);
+
+    this.medidaService.getMedidasByIds(hitoIds).subscribe({
+      next: (medidas: IMedidaGet[]) => {
+        if (medidas && medidas.length > 0) {
+          this.processDataForChart(medidas);
+        } else {
+          console.warn('No se encontraron medidas para los hitos seleccionados');
+          this.initChart();
+        }
+        this.loading = false;
+        this.showClearButton = true;
+      },
+      error: (error) => {
+        console.error('Error al obtener medidas:', error);
+        this.loading = false;
+        this.initChart();
+        this.showClearButton = true;
+      }
+    });
+  }
+
+  clearCharts() {
+    this.selectedHitos = [];
+    this.showClearButton = false;
+    this.initChart();
+  }
+
+  downloadCharts() {
+    const selectedHitosNames = this.selectedHitos.map(hito => hito.nombreHito).join('_');
+    const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+
+    const chartElements = document.querySelectorAll('[id="chartEsteNorte"]');
+
+    chartElements.forEach((chartElement, index) => {
+      setTimeout(() => {
+        const canvas = chartElement.querySelector('canvas');
+        if (canvas) {
+          const tempCanvas = document.createElement('canvas');
+          const tempCtx = tempCanvas.getContext('2d');
+
+          if (tempCtx) {
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+
+            tempCtx.fillStyle = '#ffffff';
+            tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+            tempCtx.drawImage(canvas, 0, 0);
+
+            const hitoName = this.dataEsteNorte[index]?.nombreHito || `Hito_${index + 1}`;
+            const link = document.createElement('a');
+            link.download = `Trayectoria_${hitoName}_${timestamp}.png`;
+            link.href = tempCanvas.toDataURL('image/png');
+            link.click();
+          }
+        }
+      }, index * 100);
+    });
   }
 
   loadMedidasData() {
     this.loading = true;
-    this.medidaService.getAllMedidas().subscribe({
-      next: (medidas: IMedidaGet[]) => {
-        this.processDataForChart(medidas);
-        this.loading = false;
-      },
-      error: (error) => {
-        this.loading = false;
-        this.initChart();
-      }
-    });
   }
 
   processDataForChart(medidas: IMedidaGet[]) {
     const { medidasPorHito } = this.dataProcessingService.processMedidas(medidas);
 
-    const colores = [
-      '#42A5F5', '#66BB6A', '#FF7043', '#AB47BC', '#26A69A',
-      '#FFA726', '#EF5350', '#5C6BC0', '#FFCA28', '#78909C'
-    ];
-
     this.dataEsteNorte = Object.keys(medidasPorHito).map((nombreHito, index) => {
       const datosHito = medidasPorHito[nombreHito];
-      const color = colores[index % colores.length];
+      const color = chartConfig.colors[index % chartConfig.colors.length];
 
       return {
         nombreHito,
@@ -98,7 +155,6 @@ export class Trayectoria implements OnInit, OnDestroy {
               pointBorderColor: datosHito.map((_, i) => (i === 0 ? 'orange' : i === datosHito.length - 1 ? 'red' : color)),
               showLine: true,
             },
-            // Legend entries for initial and final points
             {
               label: 'Punto Inicial',
               data: [],

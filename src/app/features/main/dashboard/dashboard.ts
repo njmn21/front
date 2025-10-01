@@ -36,17 +36,17 @@ export class Dashboard implements OnInit {
 
     this.items = [
       {
-        label: 'Gráficas Desplazamiento',
+        label: 'Desplazamiento',
         icon: 'pi pi-chart-line',
         routerLink: ['desplazamiento']
       },
       {
-        label: 'Gráficas Velocidades',
+        label: 'Velocidad',
         icon: 'pi pi-chart-line',
         routerLink: ['velocidad']
       },
       {
-        label: 'Gráficas Trayectorias',
+        label: 'Trayectoria',
         icon: 'pi pi-chart-line',
         routerLink: ['trayectoria']
       }

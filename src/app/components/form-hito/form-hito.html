@@ -1,6 +1,6 @@
 <div class="card">
     <p-drawer 
-        header="Crear Nuevo Hito" 
+        header="Crear Nuevo Hito Topográfico" 
         [(visible)]="visible2" 
         position="right"
         styleClass="w-[500px]"
@@ -14,13 +14,13 @@
                 <p-floatlabel variant="on" class="w-full">
                     <input pInputText id="nombreHito" formControlName="nombreHito" autocomplete="off"
                         class="w-full h-12" />
-                    <label for="nombreHito">Nombre Hito</label>
+                    <label for="nombreHito">Nombre Hito Topográfico</label>
                 </p-floatlabel>
                 <p-select 
                     [options]="depositos" 
                     formControlName="deposito" 
                     optionLabel="nombreDeposito" 
-                    placeholder="Selecciona un depósito"
+                    placeholder="Selecciona un depósito de relave"
                     class="w-full h-12" [showClear]="true" 
                 />
             </div>
