@@ -13,18 +13,6 @@ export class MedidaService {
 
   constructor(private http: HttpClient) { }
 
-  getAllMedidas(): Observable<IMedidaGet[]> {
-    const url = `${this.baseUrl}/Tailing/get-all-measurements`;
-    return this.http.get<{ result: IMedidaGet[] }>(url)
-      .pipe(
-        map(response => response.result),
-        catchError(error => {
-          console.error('Error al obtener medidas:', error);
-          return throwError(() => error);
-        })
-      );
-  }
-
   getMedidasById(id: number): Observable<IMedidaGet[]> {
     const url = `${this.baseUrl}/Tailing/get-measurements-by-landmark-id/${id}`;
 
@@ -52,7 +40,19 @@ export class MedidaService {
       );
   }
 
-  addMeasurement(medida: IMedidaPost): Observable<IMedidaPost> {
+  getMedidasByIds(hitoIds: number[]): Observable<IMedidaGet[]> {
+    const url = `${this.baseUrl}/Tailing/get-measurements-by-landmark-ids`;
+    const requestBody = { hitoIds };
+
+    return this.http.post<{ result: IMedidaGet[] }>(url, requestBody)
+      .pipe(
+        map(response => response.result),
+        catchError(error => {
+          console.error('Error en getMedidasByIds:', error);
+          return throwError(() => error);
+        })
+      );
+  } addMeasurement(medida: IMedidaPost): Observable<IMedidaPost> {
     const url = `${this.baseUrl}/Tailing/add-measurement`;
     return this.http.post<{ result: IMedidaPost }>(url, medida)
       .pipe(

@@ -43,7 +43,7 @@ export class LeftSidebar {
     {
       routeLink: '/dashboard',
       icon: 'pi pi-fw pi-chart-bar',
-      label: 'Gráficas'
+      label: 'Gráficos'
     },
   ];
 

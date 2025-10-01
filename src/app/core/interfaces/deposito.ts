@@ -12,10 +12,10 @@ export interface IDepositoPost {
 }
 
 export interface IHitoGet {
-    HitoId: number;
-    NombreHito: string;
-    DepositoId: number;
-    NombreDeposito: string;
+    hitoId: number;
+    nombreHito: string;
+    depositoId: number;
+    nombreDeposito: string;
 }
 
 export interface IHitoPost {

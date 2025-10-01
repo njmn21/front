@@ -1,6 +1,20 @@
 <h3 class="text-3xl font-bold p-4 ">Velocidad</h3>
 
 <div class="card flex justify-end pb-2">
+    @if (showClearButton) {
+        <p-button 
+            label="Limpiar" 
+            class="mr-2" 
+            (onClick)="clearCharts()"
+            severity="secondary"
+        />
+    }
+    <p-button 
+        label="Gráficar" 
+        class="mr-4" 
+        (onClick)="generateCharts()"
+        [disabled]="!selectedHitos || selectedHitos.length === 0"
+    />
     <p-multiselect 
         [options]="hitos" 
         [(ngModel)]="selectedHitos" 
@@ -23,4 +37,16 @@
             <p-chart type="line" [data]="dataAverageSpeed" [options]="optionsAverageSpeed" class="h-[30rem]" />
         }
     </div>
+</div>
+
+<div class="card flex justify-end pb-4">
+    @if (showClearButton) {
+        <p-button 
+            label="Descargar" 
+            class="mr-2" 
+            (onClick)="downloadCharts()"
+            severity="success"
+            icon="pi pi-download"
+        />
+    }
 </div>

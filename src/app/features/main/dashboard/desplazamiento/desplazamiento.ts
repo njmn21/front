@@ -4,20 +4,22 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { Chart } from 'chart.js';
 import { ChartModule } from 'primeng/chart';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ButtonModule } from 'primeng/button';
 
-import { HitoService } from '../../../../core/services/hito-service';
 import { IHitoGet } from '../../../../core/interfaces/deposito';
 import { MedidaService } from '../../../../core/services/medida-service';
 import { IMedidaGet } from '../../../../core/interfaces/deposito';
 import { DataProcessingService } from '../../../../core/services/data-processing.service';
 import { HitoSharedService } from '../../../../core/services/hito-shared.service';
 import { chartOptions, generateChartOptions } from '../chart-options';
+import { chartConfig } from '../../../../core/config/chart-config';
 
 Chart.register({
   id: 'backgroundZonesTotal',
   beforeDraw: (chart: any) => {
-    if (chart.config.options.plugins.backgroundZonesEnabled) {
+    if (chart.config.options.plugins.backgroundZonesDesplazamientoEnabled) {
       const ctx = chart.ctx;
       const yScale = chart.scales.y;
       const zones = [
@@ -39,6 +41,31 @@ Chart.register({
           yStart - yEnd
         );
       });
+
+      const drawHorizontalLine = (yValue: number, color: string, label: string) => {
+        const lineY = yScale.getPixelForValue(yValue);
+        ctx.save();
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(chart.chartArea.left, lineY);
+        ctx.lineTo(chart.chartArea.right, lineY);
+        ctx.stroke();
+        ctx.restore();
+
+        // etiqueta para la linea
+        ctx.save();
+        ctx.fillStyle = color;
+        ctx.font = '12px Arial';
+        ctx.fillText(label, chart.chartArea.right - 140, lineY - 5);
+        ctx.restore();
+      };
+
+      // dibujar las lineas usando la funcion helper
+      drawHorizontalLine(5, 'green', 'N. Alerta 1: 5 cm');
+      drawHorizontalLine(15, 'orange', 'N. Alerta 2: 15 cm');
+      drawHorizontalLine(25, 'red', 'N. Alerta 3: 25 cm');
     }
   }
 });
@@ -49,7 +76,8 @@ Chart.register({
     FormsModule,
     MultiSelectModule,
     ChartModule,
-    CommonModule
+    CommonModule,
+    ButtonModule
   ],
   templateUrl: './desplazamiento.html',
   styleUrl: './desplazamiento.css'
@@ -57,8 +85,8 @@ Chart.register({
 export class Desplazamiento implements OnInit, OnDestroy {
 
   hitos: IHitoGet[] = [];
-  selectedHitos: IHitoGet | null = null;
-  private subscription: Subscription = new Subscription();
+  selectedHitos: IHitoGet[] = [];
+  private destroy$ = new Subject<void>();
 
   data: any;
   options: any;
@@ -70,7 +98,8 @@ export class Desplazamiento implements OnInit, OnDestroy {
   dataAverageSpeed: any;
   optionsEsteNorte: any;
   optionsAverageSpeed: any;
-  loading: boolean = true;
+  loading: boolean = false;
+  showClearButton: boolean = false;
 
 
   constructor(
@@ -81,53 +110,126 @@ export class Desplazamiento implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.subscription.add(
-      this.hitoSharedService.hitos$.subscribe(hitos => {
+    this.hitoSharedService.hitos$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(hitos => {
         this.hitos = hitos;
-        this.loadMedidasData();
-      })
-    );
+        // inicializar con datos de ejemplo pero sin cargar datos reales
+        this.initChart();
+      });
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  loadMedidasData() {
+  generateCharts() {
+    if (!this.selectedHitos || this.selectedHitos.length === 0) {
+      return;
+    }
+
     this.loading = true;
-    this.medidaService.getAllMedidas().subscribe({
+    const hitoIds = this.selectedHitos.map(hito => hito.hitoId);
+
+    this.medidaService.getMedidasByIds(hitoIds).subscribe({
       next: (medidas: IMedidaGet[]) => {
-        this.processDataForChart(medidas);
+        if (medidas && medidas.length > 0) {
+          this.processDataForChart(medidas);
+        } else {
+          // mostrar mensaje o datos vacios si no hay datos
+          console.warn('No se encontraron medidas para los hitos seleccionados');
+          this.initChart();
+        }
         this.loading = false;
+        this.showClearButton = true; // boton limpiar despues de graficar
       },
       error: (error) => {
+        console.error('Error al cargar medidas por hitos seleccionados:', error);
+        let errorMessage = 'Error al cargar los datos de los gráficos.';
+
+        if (error.status === 400) {
+          errorMessage = 'Algunos de los hitos seleccionados podrían no tener medidas disponibles.';
+        }
+
+        console.warn(errorMessage);
         this.loading = false;
+        this.showClearButton = true;
         this.initChart();
       }
     });
   }
 
+  clearCharts() {
+    this.selectedHitos = [];
+    this.showClearButton = false;
+    this.initChart();
+  }
+
+  downloadCharts() {
+    const selectedHitosNames = this.selectedHitos.map(hito => hito.nombreHito).join('_');
+    const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+
+    // grafico horizontal
+    this.downloadChart('chartHorizontal', `Desplazamiento_Horizontal_${selectedHitosNames}_${timestamp}`);
+
+    // grafico vertical
+    setTimeout(() => {
+      this.downloadChart('chartVertical', `Desplazamiento_Vertical_${selectedHitosNames}_${timestamp}`);
+    }, 100);
+
+    // grafico total
+    setTimeout(() => {
+      this.downloadChart('chartTotal', `Desplazamiento_Total_${selectedHitosNames}_${timestamp}`);
+    }, 200);
+  }
+
+  private downloadChart(chartId: string, filename: string) {
+    const chartElement = document.getElementById(chartId);
+    if (chartElement) {
+      const canvas = chartElement.querySelector('canvas');
+      if (canvas) {
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
+
+        if (tempCtx) {
+          tempCanvas.width = canvas.width;
+          tempCanvas.height = canvas.height;
+
+          tempCtx.fillStyle = '#ffffff';
+          tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+          tempCtx.drawImage(canvas, 0, 0);
+
+          const link = document.createElement('a');
+          link.download = `${filename}.png`;
+          link.href = tempCanvas.toDataURL('image/png');
+          link.click();
+        }
+      }
+    }
+  }
+
+  loadMedidasData() {
+    this.loading = true;
+  }
+
   processDataForChart(medidas: IMedidaGet[]) {
     const { medidasPorHito, fechasUnicas } = this.dataProcessingService.processMedidas(medidas);
 
-    const colores = [
-      '#42A5F5', '#66BB6A', '#FF7043', '#AB47BC', '#26A69A',
-      '#FFA726', '#EF5350', '#5C6BC0', '#FFCA28', '#78909C'
-    ];
-
     this.data = {
       labels: fechasUnicas,
-      datasets: this.createDataset(medidasPorHito, fechasUnicas, 'horizontalAbsoluto', colores)
+      datasets: this.createDataset(medidasPorHito, fechasUnicas, 'horizontalAbsoluto', chartConfig.colors)
     };
 
     this.dataVertical = {
       labels: fechasUnicas,
-      datasets: this.createDataset(medidasPorHito, fechasUnicas, 'verticalAbsoluto', colores)
+      datasets: this.createDataset(medidasPorHito, fechasUnicas, 'verticalAbsoluto', chartConfig.colors)
     };
 
     this.dataTotal = {
       labels: fechasUnicas,
-      datasets: this.createDataset(medidasPorHito, fechasUnicas, 'totalAbsoluto', colores)
+      datasets: this.createDataset(medidasPorHito, fechasUnicas, 'totalAbsoluto', chartConfig.colors)
     };
 
     this.initChartOptions();
@@ -227,19 +329,17 @@ export class Desplazamiento implements OnInit, OnDestroy {
   }
 
   initChartOptions() {
-    const baseOptions = chartOptions.baseOptions;
-
-    this.options = generateChartOptions(baseOptions, chartOptions.horizontal.title, chartOptions.horizontal.yAxisTitle, 30);
+    this.options = generateChartOptions(chartConfig.baseOptions, chartOptions.horizontal.title, chartOptions.horizontal.yAxisTitle, 30);
     this.options.plugins.legend = { position: 'right' };
 
-    this.optionsVertical = generateChartOptions(baseOptions, chartOptions.vertical.title, chartOptions.vertical.yAxisTitle, 30);
+    this.optionsVertical = generateChartOptions(chartConfig.baseOptions, chartOptions.vertical.title, chartOptions.vertical.yAxisTitle, 30);
     this.optionsVertical.scales.y.min = -5;
     this.optionsVertical.plugins.legend = { position: 'right' };
 
     this.optionsTotal = {
-      ...generateChartOptions(baseOptions, chartOptions.total.title.join(' '), chartOptions.total.yAxisTitle, chartOptions.total.max),
+      ...generateChartOptions(chartConfig.baseOptions, chartOptions.total.title.join(' '), chartOptions.total.yAxisTitle, chartOptions.total.max),
       plugins: {
-        backgroundZonesEnabled: true,
+        backgroundZonesDesplazamientoEnabled: true,
         title: {
           display: true,
           text: 'Desplazamiento Total Absoluto (cm)',
