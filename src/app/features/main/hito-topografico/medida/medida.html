@@ -28,7 +28,7 @@
             <label for="velocidadMedia">Velocidad Máxima Registrada (cm/día)</label>
         </p-floatlabel>
         <p-floatlabel variant="on" class="w-full">
-            <input pInputText id="fechaMedicion" [value]="maxMedida.fechaMedicion | date:'dd/MM/yyyy'" readonly
+            <input pInputText id="fechaMedicion" [value]="maxMedida.fechaMedicion | date:'dd/MMM/yyyy':'':'es'" readonly
                 class="w-full h-12" />
             <label for="fechaMedicion">Fecha Medición</label>
         </p-floatlabel>
@@ -58,13 +58,10 @@
                     <th rowspan="2" style="width:7%; border-right: 2px solid #e5e7eb;" class="text-center">
                         Fecha
                         <div style="display: flex; justify-content: flex-end; margin-top: 5px;">
-                            <p-columnFilter type="text" field="fechaMedicion" placeholder="Año" ariaLabel="Filter Año">
-                                <ng-template #filter let-value let-filter="filterCallback">
-                                    <input pInputText type="number" [ngModel]="value"
-                                        (input)="filter($event.target.value)" placeholder="Año"
-                                        style="width: 80px; font-size: 11px; padding: 2px;" />
-                                </ng-template>
-                            </p-columnFilter>
+                            <input pInputText type="text" 
+                                (input)="applyDateFilter($event, dt2)" 
+                                placeholder="ej: 2023, oct"
+                                style="width: 100px; font-size: 11px; padding: 2px;" />
                         </div>
                     </th>
                     <th rowspan="2" style="width:6%; border-right: 2px solid #e5e7eb;" class="text-center">Hito
@@ -92,10 +89,10 @@
                 </tr>
             </ng-template>
             <ng-template #body let-medida let-rowIndex="rowIndex">
-                <tr class="hover:bg-primary-100 dark:hover:bg-primary-100 hover:text-highlight-color dark:hover:text-black"
+                <tr class="hover:bg-primary-100 dark:hover:bg-primary-100 hover:text-highlight-color dark:hover:text-black cursor-pointer"
                     (click)="onRowClick(medida)">
                     <td class="text-center">{{ rowIndex + 1 }}</td>
-                    <td class="text-center">{{ medida.fechaMedicion | date:'dd/MM/yyyy' }}</td>
+                    <td class="text-center">{{ medida.fechaMedicion | date:'dd/MMM/yyyy':'':'es' }}</td>
                     <td class="text-center">{{ medida.nombreHito }}</td>
                     <td class="text-center">{{ medida.este | number:'1.2-2' }}</td>
                     <td class="text-center">{{ medida.norte | number:'1.2-2' }}</td>
@@ -124,4 +121,4 @@
     </div>
 </div>
 
-<app-show-medida [medida]="selectedMedida" [visible]="showDialog" (close)="closeDialog()"></app-show-medida>
+<app-show-medida [medida]="selectedMedida" [visible]="showDialog" (close)="closeDialog()" (medidaUpdated)="onMedidaUpdated()"></app-show-medida>

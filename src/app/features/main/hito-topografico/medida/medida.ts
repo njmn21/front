@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Table } from 'primeng/table';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
@@ -10,9 +10,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import localeEs from '@angular/common/locales/es';
 
 import { MedidaService } from '../../../../core/services/medida-service';
-import { IHitoGet, IMaxMedidaGet, IMedidaGet } from '../../../../core/interfaces/deposito';
+import { IHitoGet, IMaxMedidaGet, IMedidaGet } from '../../../../core/interfaces/hito';
 import { ShowMedida } from '../../../../components/show-medida/show-medida';
 import { HitoService } from '../../../../core/services/hito-service';
 
@@ -43,11 +44,14 @@ export class Medida implements OnInit {
   hitos: IHitoGet[] = [];
   selectedHitos: IHitoGet | null = null;
   maxMedida: IMaxMedidaGet | null = null;
+  datePipe = new DatePipe('es');
 
   constructor(
     private medidaService: MedidaService,
     private hitoService: HitoService
-  ) { }
+  ) {
+    registerLocaleData(localeEs);
+  }
 
   ngOnInit() {
     this.loading = true;
@@ -75,6 +79,31 @@ export class Medida implements OnInit {
     this.selectedMedida = null;
   }
 
+  onMedidaUpdated() {
+    if (this.selectedHitos && this.selectedHitos.hitoId) {
+      this.loading = true;
+      this.medidaService.getMedidasById(this.selectedHitos.hitoId).subscribe({
+        next: (data: IMedidaGet[]) => {
+          this.medidas = data;
+          this.loading = false;
+        },
+        error: (err) => {
+          this.loading = false;
+        }
+      });
+
+      this.medidaService.getMaxMedidaById(this.selectedHitos.hitoId).subscribe({
+        next: (maxMedida) => {
+          this.maxMedida = maxMedida;
+        },
+        error: (err) => {
+          console.error('Error fetching maxMedida:', err);
+        }
+      });
+    }
+    this.closeDialog();
+  }
+
   onHitoChange(event: any) {
     const selectedHito = event.value;
     if (selectedHito && selectedHito.hitoId) {
@@ -98,5 +127,26 @@ export class Medida implements OnInit {
         }
       });
     }
+  }
+
+  applyDateFilter(event: any, table: Table) {
+    const searchValue = (event.target as HTMLInputElement).value.toLowerCase();
+
+    if (!searchValue) {
+      // Si no hay valor de búsqueda, mostrar todos los datos
+      table.filteredValue = null;
+      return;
+    }
+
+    // Filtrar manualmente los datos
+    const filteredData = this.medidas.filter(medida => {
+      const formattedDate = this.datePipe.transform(medida.fechaMedicion, 'dd/MMM/yyyy', '', 'es');
+      const dateString = formattedDate?.toLowerCase() || '';
+      return dateString.includes(searchValue);
+    });
+
+    // Aplicar el filtro a la tabla
+    table.filteredValue = filteredData;
+    table.totalRecords = filteredData.length;
   }
 }

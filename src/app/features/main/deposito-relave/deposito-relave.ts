@@ -44,9 +44,10 @@ export class DepositoRelave {
   cols: Column[] = [
     { field: 'nombreDeposito', header: 'Nombre' },
     { field: 'ubicacion', header: 'Ubicación' },
-    { field: 'capacidad', header: 'Capacidad (m³)' },
+    { field: 'zonaUtm', header: 'Zona UTM' },
+    { field: 'coordenadaEste', header: 'Coordenada Este' },
+    { field: 'coordenadaNorte', header: 'Coordenada Norte' },
     { field: 'fechaCreacion', header: 'Fecha de Creación' },
-    { field: 'estado', header: 'Estado' },
   ];
 
   //IDeposito[]
@@ -86,7 +87,7 @@ export class DepositoRelave {
     });
   }
 
-  abrirShowDeposito(deposito: IDepositoGet) {
+  onRowClick(deposito: IDepositoGet) {
     this.depositoSeleccionado = deposito;
     this.showDepositoVisible = true;
   }

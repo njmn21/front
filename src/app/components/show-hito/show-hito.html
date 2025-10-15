@@ -1,0 +1,45 @@
+<div class="card flex justify-center">
+    <p-dialog 
+        header="Detalle Hito Topográfico" 
+        [(visible)]="visible" 
+        [modal]="true" 
+        [dismissableMask]="true"
+        [style]="{ width: '25rem' }" 
+        (onHide)="cerrar()"
+    >
+        @if (hito) {
+        <div class="m-2">
+            <div class="flex flex-col gap-4">
+                <p-floatlabel variant="on" class="w-full mb-3">
+                    <input pInputText [value]="hito.nombreHito" class="w-full h-12" readonly />
+                    <label>Hito Topográfico</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full mb-3">
+                    <input pInputText [value]="hito.este | number:'1.2-2'" class="w-full h-12"
+                        readonly />
+                    <label>Este</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full mb-3">
+                    <input pInputText [value]="hito.norte | number:'1.2-2'" class="w-full h-12"
+                        readonly />
+                    <label>Norte</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full mb-3">
+                    <input pInputText [value]="hito.elevacion | number:'1.2-2'" class="w-full h-12"
+                        readonly />
+                    <label>Elevación</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full mb-3">
+                    <input pInputText [value]="hito.nombreDeposito" class="w-full h-12" readonly />
+                    <label>Depósito de Relave</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full mb-3">
+                    <textarea pTextarea [value]="hito.descripcion" rows="4" style="resize: none"
+                        class="w-full" readonly></textarea>
+                    <label>Descripción</label>
+                </p-floatlabel>
+            </div>
+        </div>
+        }
+    </p-dialog>
+</div>

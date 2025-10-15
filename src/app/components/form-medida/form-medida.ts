@@ -17,7 +17,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { MedidaService } from '../../core/services/medida-service';
-import { IMedidaPost } from '../../core/interfaces/deposito';
+import { IMedidaPost } from '../../core/interfaces/hito';
 
 @Component({
   selector: 'app-form-medida',
@@ -43,6 +43,7 @@ import { IMedidaPost } from '../../core/interfaces/deposito';
 export class FormMedida implements OnInit {
   @Output() medidaCreada = new EventEmitter<string>();
   @Input() hitoId!: number;
+  @Input() hitoNombre!: string;
 
   right: boolean = false;
   medidaForm!: FormGroup;

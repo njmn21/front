@@ -1,0 +1,97 @@
+<div class="flex items-center justify-between mt-8">
+    <h2 class="text-2xl font-bold m-0">Piezómetros</h2>
+</div>
+
+<div class="card m-4 piezometros-table-container">
+    <p-table
+        #dt
+        [value]="piezometros"
+        [tableStyle]="{'min-width': '800px', 'width': '100%'}"
+        [paginator]="true"
+        [rows]="5"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        [loading]="loading"
+        (onSort)="customSort($event)"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center">
+                    <div class="flex items-center gap-2 justify-center">
+                        #
+                    </div>
+                </th>
+                <th pSortableColumn="nombrePiezometro" class="text-center">
+                    <div class="flex items-center gap-2 justify-center">
+                        Cód. Piezómetro
+                        <p-sortIcon field="nombrePiezometro" />
+                    </div>
+                </th>
+                <th pSortableColumn="este" class="text-center">
+                    <div class="flex items-center gap-2 justify-center">
+                        Este (m)
+                        <p-sortIcon field="este" />
+                    </div>
+                </th>
+                <th pSortableColumn="norte" class="text-center">
+                    <div class="flex items-center gap-2 justify-center">
+                        Norte (m)
+                        <p-sortIcon field="norte" />
+                    </div>
+                </th>
+                <th pSortableColumn="elevacion" class="text-center">
+                    <div class="flex items-center gap-2 justify-center">
+                        Elevación (m)
+                        <p-sortIcon field="elevacion" />
+                    </div>
+                </th>
+                <th pSortableColumn="ubicacion" class="text-center">
+                    <div class="flex items-center gap-2 justify-center">
+                        Ubicación
+                        <p-sortIcon field="ubicacion" />
+                    </div>
+                </th>
+                <th pSortableColumn="fecha_instalacion" class="text-center">
+                    <div class="flex items-center gap-2 justify-center">
+                        Fecha Instalación
+                        <p-sortIcon field="fecha_instalacion" />
+                    </div>
+                </th>
+                <th pSortableColumn="estado" class="text-center">
+                    <div class="flex items-center gap-2 justify-center">
+                        Estado
+                        <p-sortIcon field="estado" />
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-piezometro let-rowIndex="rowIndex">
+            <tr
+                class="hover:bg-primary-100 dark:hover:bg-primary-100 hover:text-highlight-color dark:hover:text-black cursor-pointer"
+                (click)="onRowClick(piezometro)"
+            >
+                <td class="text-center">{{ rowIndex + 1 }}</td>
+                <td class="text-center">{{ piezometro.nombrePiezometro }}</td>
+                <td class="text-center">{{ piezometro.este | number:'1.2-2' }}</td>
+                <td class="text-center">{{ piezometro.norte | number:'1.2-2' }}</td>
+                <td class="text-center">{{ piezometro.elevacion | number:'1.2-2' }}</td>
+                <td class="text-center truncate" title="{{ piezometro.ubicacion }}">{{ piezometro.ubicacion }}</td>
+                <td class="text-center">{{ piezometro.fecha_instalacion | date:'dd/MM/yyyy' }}</td>
+                <td class="text-center">
+                    <span [ngClass]="{
+                        'bg-green-100 text-green-800': piezometro.estado === 'Activo',
+                        'bg-red-100 text-red-800': piezometro.estado === 'Inactivo'
+                    }" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
+                        {{ piezometro.estado }}
+                    </span>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<app-show-piezometro
+    [piezometro]="selectedPiezometro"
+    [visible]="showDialog"
+    (close)="showDialog = false"
+>
+</app-show-piezometro>

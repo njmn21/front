@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { IHitoGet, IHitoPost } from '../interfaces/deposito';
+import { IHitoGet, IHitoGetWithCoordinates, IHitoPost } from '../interfaces/hito';
 import { catchError, map, Observable, throwError } from 'rxjs';
 
 @Injectable({
@@ -19,6 +19,18 @@ export class HitoService {
         map(response => response.result),
         catchError(error => {
           console.error('Error al obtener hitos:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  getAllHitosWithCoordinates(): Observable<IHitoGetWithCoordinates[]> {
+    const url = `${this.baseUrl}/Tailing/get-all-landmarks-with-coordinates`;
+    return this.http.get<{ result: IHitoGetWithCoordinates[] }>(url)
+      .pipe(
+        map(response => response.result),
+        catchError(error => {
+          console.error('Error al obtener hitos con coordenadas:', error);
           return throwError(() => error);
         })
       );

@@ -52,7 +52,10 @@ export class FormDeposito {
     this.depositoForm = this.fb.group({
       NombreDeposito: ['', Validators.required],
       Ubicacion: ['', Validators.required],
-      FechaCreacion: ['', Validators.required]
+      FechaCreacion: ['', Validators.required],
+      ZonaUtm: ['', Validators.required],
+      CoordenadaEste: ['', Validators.required],
+      CoordenadaNorte: ['', Validators.required]
     });
   }
 
@@ -81,7 +84,10 @@ export class FormDeposito {
         const deposito: IDepositoPost = {
           NombreDeposito: formValue.NombreDeposito,
           Ubicacion: formValue.Ubicacion,
-          FechaCreacion: formValue.FechaCreacion.toISOString().split('T')[0]
+          FechaCreacion: formValue.FechaCreacion.toISOString().split('T')[0],
+          ZonaUtm: formValue.ZonaUtm,
+          CoordenadaEste: formValue.CoordenadaEste,
+          CoordenadaNorte: formValue.CoordenadaNorte
         };
         this.depositoService.addDeposito(deposito).subscribe({
           next: () => {

@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, catchError, throwError } from 'rxjs';
-import { IMedidaGet, IMedidaPost, IMaxMedidaGet } from '../interfaces/deposito';
+import { IMedidaGet, IMedidaPost, IMaxMedidaGet } from '../interfaces/hito';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +59,18 @@ export class MedidaService {
         map((response: any) => response.result),
         catchError(error => {
           console.error('Error al agregar medida:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  editMeasurement(medicionId: number, medidaEdit: any): Observable<any> {
+    const url = `${this.baseUrl}/Tailing/edit-measurement/${medicionId}`;
+    return this.http.put<any>(url, medidaEdit)
+      .pipe(
+        map(response => response),
+        catchError(error => {
+          console.error('Error al editar medida:', error);
           return throwError(() => error);
         })
       );

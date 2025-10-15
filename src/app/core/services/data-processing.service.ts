@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IMedidaGet } from '../interfaces/deposito';
+import { IMedidaGet } from '../interfaces/hito';
 
 @Injectable({
     providedIn: 'root'

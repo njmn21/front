@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { IHitoGet } from '../interfaces/deposito';
+import { IHitoGet } from '../interfaces/hito';
 
 @Injectable({
     providedIn: 'root'

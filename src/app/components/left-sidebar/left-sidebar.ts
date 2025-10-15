@@ -36,9 +36,14 @@ export class LeftSidebar {
       label: 'Depósito Relaves'
     },
     {
-      routeLink: '/registrar',
-      icon: 'pi pi-pen-to-square',
+      routeLink: '/hito-topograficos',
+      icon: 'pi pi-fw pi-pen-to-square',
       label: 'Hitos y Lecturas'
+    },
+    {
+      routeLink: '/piezometro',
+      icon: 'pi pi-fw pi-hammer',
+      label: 'Piezómetros'
     },
     {
       routeLink: '/dashboard',

@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
+import { TextareaModule } from 'primeng/textarea';
 import { Select } from 'primeng/select';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
@@ -17,7 +18,8 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 
 import { Deposito } from '../../core/services/deposito';
 import { HitoService } from '../../core/services/hito-service';
-import { IDepositoGet, IHitoPost } from '../../core/interfaces/deposito';
+import { IHitoPost } from '../../core/interfaces/hito';
+import { IDepositoGet } from '../../core/interfaces/deposito';
 
 @Component({
   selector: 'app-form-hito',
@@ -28,6 +30,7 @@ import { IDepositoGet, IHitoPost } from '../../core/interfaces/deposito';
     ReactiveFormsModule,
     FloatLabelModule,
     InputTextModule,
+    TextareaModule,
     Select,
     ToastModule,
     ConfirmPopupModule
@@ -61,7 +64,8 @@ export class FormHito implements OnInit {
   ngOnInit() {
     this.hitoForm = this.fb.group({
       nombreHito: ['', Validators.required],
-      deposito: [null, Validators.required]
+      deposito: [null, Validators.required],
+      descripcion: ['', Validators.required]
     });
     this.depositoService.getAllDepositos().subscribe((depositos: IDepositoGet[]) => {
       this.depositos = depositos;
@@ -92,7 +96,8 @@ export class FormHito implements OnInit {
         const formValue = this.hitoForm.value;
         const hito: IHitoPost = {
           NombreHito: formValue.nombreHito,
-          DepositoId: formValue.deposito.id
+          DepositoId: formValue.deposito.id,
+          Descripcion: formValue.descripcion
         };
         this.hitoService.addHito(hito).subscribe({
           next: () => {
@@ -101,7 +106,21 @@ export class FormHito implements OnInit {
             this.hitoCreado.emit('El hito fue guardado exitosamente');
           },
           error: (err) => {
-            this.errorMsg = 'Error al guardar el hito. Intente nuevamente.';
+            if (err.status === 400 && err.error?.message) {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: err.error.message,
+                life: 5000,
+              });
+            } else {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Ocurrió un error al crear el hito.',
+                life: 5000,
+              });
+            }
           }
         });
       },

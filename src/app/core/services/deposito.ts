@@ -19,7 +19,7 @@ export class Deposito {
     const url = `${this.baseUrl}/Tailing/get-all-deposits`;
     return this.http.get<{ result: IDepositoGet[] }>(url)
       .pipe(
-        map((response: any) => response.result),
+        map((response: { result: IDepositoGet[] }) => response.result),
         catchError(error => {
           console.error('Error al obtener depósitos:', error);
           return throwError(() => error);

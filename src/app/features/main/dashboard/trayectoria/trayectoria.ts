@@ -10,7 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { MedidaService } from '../../../../core/services/medida-service';
 import { DataProcessingService } from '../../../../core/services/data-processing.service';
 import { HitoSharedService } from '../../../../core/services/hito-shared.service';
-import { IHitoGet, IMedidaGet } from '../../../../core/interfaces/deposito';
+import { IHitoGet, IMedidaGet } from '../../../../core/interfaces/hito';
 import { chartConfig } from '../../../../core/config/chart-config';
 
 @Component({

@@ -1,0 +1,50 @@
+<div class="card flex justify-center">
+    <p-dialog
+        header="Detalle Piezómetro"
+        [(visible)]="visible"
+        [modal]="true"
+        [dismissableMask]="true"
+        [style]="{ width: '25rem' }"
+        (onHide)="cerrar()"
+    >
+        @if (piezometro) {
+            <div class="m-2">
+                <div class="flex flex-col gap-4">
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        <input pInputText [value]="piezometro.nombrePiezometro" class="w-full h-12" readonly />
+                        <label>Cód. Piezómetro</label>
+                    </p-floatlabel>
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        <input pInputText [value]="piezometro.este | number:'1.2-2'" class="w-full h-12" readonly />
+                        <label>Este</label>
+                    </p-floatlabel>
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        <input pInputText [value]="piezometro.norte | number:'1.2-2'" class="w-full h-12" readonly />
+                        <label>Norte</label>
+                    </p-floatlabel>
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        <input pInputText [value]="piezometro.elevacion | number:'1.2-2'" class="w-full h-12" readonly />
+                        <label>Elevación</label>
+                    </p-floatlabel>
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        <input pInputText [value]="piezometro.ubicacion" class="w-full h-12" readonly />
+                        <label>Ubicación</label>
+                    </p-floatlabel>
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        <input
+                            pInputText
+                            [value]="piezometro.fecha_instalacion | date:'dd/MM/yyyy'"
+                            class="w-full h-12"
+                            readonly
+                        />
+                        <label>Fecha Instalación</label>
+                    </p-floatlabel>
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        <input pInputText [value]="piezometro.estado" class="w-full h-12" readonly />
+                        <label>Estado</label>
+                    </p-floatlabel>
+                </div>
+            </div>
+        }
+    </p-dialog>
+</div>

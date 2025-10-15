@@ -18,6 +18,18 @@
               <label>Ubicación</label>
             </p-floatlabel>
             <p-floatlabel variant="on" class="w-full mb-3">
+              <input pInputText [value]="deposito.zonaUtm" class="w-full h-12" readonly />
+              <label>Zona UTM</label>
+            </p-floatlabel>
+            <p-floatlabel variant="on" class="w-full mb-3">
+              <input pInputText [value]="deposito.coordenadaEste" class="w-full h-12" readonly />
+              <label>Coordenada Este</label>
+            </p-floatlabel>
+            <p-floatlabel variant="on" class="w-full mb-3">
+              <input pInputText [value]="deposito.coordenadaNorte" class="w-full h-12" readonly />
+              <label>Coordenada Norte</label>
+            </p-floatlabel>
+            <p-floatlabel variant="on" class="w-full mb-3">
               <input pInputText [value]="deposito.fechaCreacion" class="w-full h-12" readonly />
               <label>Fecha de Creación</label>
             </p-floatlabel>

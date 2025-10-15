@@ -8,9 +8,9 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ButtonModule } from 'primeng/button';
 
-import { IHitoGet } from '../../../../core/interfaces/deposito';
+import { IHitoGet } from '../../../../core/interfaces/hito';
 import { MedidaService } from '../../../../core/services/medida-service';
-import { IMedidaGet } from '../../../../core/interfaces/deposito';
+import { IMedidaGet } from '../../../../core/interfaces/hito';
 import { DataProcessingService } from '../../../../core/services/data-processing.service';
 import { HitoSharedService } from '../../../../core/services/hito-shared.service';
 import { chartOptions, generateChartOptions } from '../chart-options';

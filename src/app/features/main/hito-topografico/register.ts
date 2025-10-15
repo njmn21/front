@@ -5,7 +5,10 @@ import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  imports: [RouterOutlet, Menubar],
+  imports: [
+    RouterOutlet,
+    Menubar
+  ],
   templateUrl: './register.html',
   styleUrl: './register.css'
 })
@@ -15,7 +18,7 @@ export class Register implements OnInit {
   ngOnInit() {
     this.items = [
       {
-        label: 'Hitos Topograficos',
+        label: 'Hitos Topográficos',
         icon: 'pi pi-list-check',
         routerLink: ['hito']
       },

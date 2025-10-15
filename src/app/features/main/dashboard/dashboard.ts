@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { HitoService } from '../../../core/services/hito-service';
 import { HitoSharedService } from '../../../core/services/hito-shared.service';
-import { IHitoGet } from '../../../core/interfaces/deposito';
+import { IHitoGet } from '../../../core/interfaces/hito';
 
 
 @Component({

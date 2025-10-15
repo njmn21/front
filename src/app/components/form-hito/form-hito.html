@@ -23,6 +23,11 @@
                     placeholder="Selecciona un depósito de relave"
                     class="w-full h-12" [showClear]="true" 
                 />
+                <p-floatlabel variant="on" class="w-full">
+                    <textarea pTextarea id="descripcion" formControlName="descripcion" rows="4" 
+                        style="resize: none" class="w-full" autocomplete="off"></textarea>
+                    <label for="descripcion">Descripción</label>
+                </p-floatlabel>
             </div>
             <div class="flex justify-end mt-4">
                 <p-toast />

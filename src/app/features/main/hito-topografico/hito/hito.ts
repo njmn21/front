@@ -10,6 +10,8 @@ import { Toast } from "primeng/toast";
 import { HitoService } from '../../../../core/services/hito-service';
 import { FormHito } from '../../../../components/form-hito/form-hito';
 import { FormMedida } from '../../../../components/form-medida/form-medida';
+import { IHitoGetWithCoordinates } from '../../../../core/interfaces/hito';
+import { ShowHito } from '../../../../components/show-hito/show-hito';
 
 @Component({
   selector: 'app-hito',
@@ -19,6 +21,7 @@ import { FormMedida } from '../../../../components/form-medida/form-medida';
     Toast,
     FormHito,
     FormMedida,
+    ShowHito
   ],
   providers: [
     ConfirmationService,
@@ -34,6 +37,8 @@ export class Hito {
   initialValue: any[] = [];
   loading: boolean = true;
   isSorted: boolean | null = null;
+  selectedHito: IHitoGetWithCoordinates | null = null;
+  showDialog: boolean = false;
 
   constructor(
     private messageService: MessageService,
@@ -46,7 +51,7 @@ export class Hito {
 
   cargarHitos() {
     this.loading = true;
-    this.hitoService.getAllHitos().subscribe({
+    this.hitoService.getAllHitosWithCoordinates().subscribe({
       next: (data) => {
         this.hitos = data;
         this.initialValue = [...data];
@@ -102,5 +107,20 @@ export class Hito {
 
       return event.order * result;
     });
+  }
+
+  formatNumericValue(value: number | null | undefined): string {
+    if (value === null || value === undefined || value === 0) {
+      return '-';
+    }
+    return (value as number).toLocaleString('es-ES', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  onRowClick(hito: IHitoGetWithCoordinates) {
+    this.selectedHito = hito;
+    this.showDialog = true;
   }
 }

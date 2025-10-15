@@ -9,9 +9,9 @@ import { takeUntil } from 'rxjs/operators';
 import { Chart } from 'chart.js';
 import { CommonModule } from '@angular/common';
 
-import { IHitoGet } from '../../../../core/interfaces/deposito';
+import { IHitoGet } from '../../../../core/interfaces/hito';
 import { MedidaService } from '../../../../core/services/medida-service';
-import { IMedidaGet } from '../../../../core/interfaces/deposito';
+import { IMedidaGet } from '../../../../core/interfaces/hito';
 import { DataProcessingService } from '../../../../core/services/data-processing.service';
 import { HitoSharedService } from '../../../../core/services/hito-shared.service';
 import { chartConfig } from '../../../../core/config/chart-config';
