@@ -38,7 +38,7 @@ import { HitoService } from '../../../../core/services/hito-service';
 })
 export class Medida implements OnInit {
   medidas: IMedidaGet[] = [];
-  loading: boolean = true;
+  loading: boolean = false;
   selectedMedida: IMedidaGet | null = null;
   showDialog: boolean = false;
   hitos: IHitoGet[] = [];
@@ -54,12 +54,6 @@ export class Medida implements OnInit {
   }
 
   ngOnInit() {
-    this.loading = true;
-
-    setTimeout(() => {
-      this.loading = false;
-    }, 3000);
-
     this.hitoService.getAllHitos().subscribe((hitos: IHitoGet[]) => {
       this.hitos = hitos;
     });

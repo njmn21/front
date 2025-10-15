@@ -1,17 +1,29 @@
 import { Component, ViewChild } from '@angular/core';
 import { TableModule, Table } from 'primeng/table';
 import { CommonModule } from '@angular/common';
+import { Toast } from "primeng/toast";
+import {
+  ConfirmationService,
+  MessageService
+} from 'primeng/api';
 
 import { PiezometroService } from '../../../../core/services/piezometro-service';
 import { IPiezometroGet } from '../../../../core/interfaces/piezometro';
 import { ShowPiezometro } from '../../../../components/show-piezometro/show-piezometro';
+import { FormMedidaPiezometro } from '../../../../components/form-medida-piezometro/form-medida-piezometro';
 
 @Component({
   selector: 'app-piezometro',
   imports: [
     TableModule,
     CommonModule,
-    ShowPiezometro
+    ShowPiezometro,
+    FormMedidaPiezometro,
+    Toast
+  ],
+  providers: [
+    ConfirmationService,
+    MessageService
   ],
   templateUrl: './piezometro.html',
   styleUrl: './piezometro.css'
@@ -27,7 +39,8 @@ export class Piezometro {
   showDialog: boolean = false;
 
   constructor(
-    private piezometroService: PiezometroService
+    private piezometroService: PiezometroService,
+    private messageService: MessageService
   ) { }
 
   ngOnInit() {
@@ -86,9 +99,16 @@ export class Piezometro {
   }
 
   onRowClick(piezometro: IPiezometroGet) {
-    console.log('Row clicked:', piezometro);
     this.selectedPiezometro = piezometro;
     this.showDialog = true;
-    console.log('showDialog set to:', this.showDialog);
+  }
+
+  mostrarToast(mensaje: string) {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Medida Creada',
+      detail: mensaje,
+      life: 3000
+    });
   }
 }

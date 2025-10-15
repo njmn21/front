@@ -1,0 +1,72 @@
+<div class="card">
+    <p-drawer
+        [header]="'Crear Nuevo Registro - ' + piezometroNombre"
+        [(visible)]="right"
+        position="right"
+        styleClass="w-[500px]"
+        (onHide)="clearForm()"
+    >
+        <form 
+            [formGroup]="piezometroForm"
+            class="card flex flex-col gap-4 p-4"
+        >
+            <div class="card flex flex-col gap-4">
+                <p-floatlabel variant="on" class="w-full">
+                    <input 
+                        pInputText 
+                        id="LongitudMedicion" 
+                        formControlName="LongitudMedicion" 
+                        autocomplete="off" 
+                        class="w-full h-12" 
+                        type="number"
+                    >
+                    <label for="LongitudMedicion">Longitud Medición (m)</label>
+                </p-floatlabel>
+                <p-floatlabel 
+                    variant="on" 
+                    class="w-full"
+                >
+                    <p-datepicker 
+                        formControlName="FechaMedicion" 
+                        [iconDisplay]="'input'" 
+                        [showIcon]="true"
+                        inputId="fechaMedicion"
+                        class="w-full"
+                        [dateFormat]="'dd/mm/yy'"
+                        inputStyleClass="w-full h-12"
+                    />
+                    <label for="fechaMedicion">Fecha de Medición</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full">
+                    <textarea 
+                        pTextarea 
+                        id="Comentario" 
+                        formControlName="Comentario" 
+                        rows="4" 
+                        class="w-full min-h-20" 
+                        autocomplete="off"
+                        style="resize: none;"
+                    ></textarea>
+                    <label for="Comentario">Comentario</label>
+                </p-floatlabel>
+            </div>
+            <div class="flex justify-end mt-4">
+                <p-toast />
+                <p-confirmpopup />
+                <p-button 
+                    type="button" 
+                    label="Guardar" 
+                    [disabled]="piezometroForm.invalid" 
+                    (onClick)="confirm($event)" 
+                />
+            </div>
+        </form>
+    </p-drawer>
+    <div class="flex gap-2 justify-center">
+        <p-button 
+            type="button" 
+            (click)="right = true" 
+            icon="pi pi-plus"
+        />
+    </div>
+</div>

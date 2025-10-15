@@ -92,7 +92,7 @@
               </p-floatlabel>
               <p-floatlabel variant="on" class="w-full mb-3">
                 @if (isEditMode) {
-                  <p-datepicker [(ngModel)]="editForm.fechaMedicion" dateFormat="dd/mm/yy" [showIcon]="true" 
+                  <p-datepicker [(ngModel)]="editForm.fechaMedicion" dateFormat="dd/mm/yy" [showIcon]="true" inputStyleClass="w-full h-12"
                     placeholder="Seleccione una fecha" class="w-full" inputId="fechaMedicion" />
                 } @else {
                   <input pInputText [value]="medida.fechaMedicion | date:'dd/MM/yyyy'" class="w-full h-12" readonly />

@@ -1,1 +1,60 @@
-<p>lecturas works!</p>
+<div class="flex items-center justify-between mt-8">
+    <h2 class="text-2xl font-bold m-0">Registros</h2>
+
+    <div class="card flex justify-center items-center ml-4">
+        <p-select [options]="piezometros" [(ngModel)]="selectedPiezometro" optionLabel="nombrePiezometro"
+            placeholder="Seleccione un Piezómetro" [editable]="true" class="w-full md:w-56"
+            (onChange)="onPiezometroChange($event)" 
+        />
+    </div>
+</div>
+
+<div class="card py-8 w-[88vw]">
+    <div class="table-container" style="overflow-x: auto;">
+        <p-table #dt2 [value]="medidas" dataKey="medicionId" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+            [paginator]="true" [loading]="loading" [globalFilterFields]="[
+                'medicionId', 'fechaMedicion', 'cotaActualTerreno', 'cotaFondoPozo', 
+                'cotaNivelPiezometro', 'profundidadActualPozo', 'longitudMedicion', 'comentario'
+            ]" [tableStyle]="{ 'min-width': '80rem' }" [scrollable]="true" scrollHeight="600px" scrollDirection="both"
+            class="hover:bg-white">
+            <ng-template #header>
+                <tr>
+                    <th style="width:8%; border-right: 2px solid #e5e7eb;" class="text-center">#</th>
+                    <th style="width:12%; border-right: 2px solid #e5e7eb;" class="text-center">
+                        Fecha Medición
+                        <div style="display: flex; justify-content: center; margin-top: 5px;">
+                            <input pInputText type="text" 
+                                (input)="applyDateFilter($event, dt2)" 
+                                placeholder="ej: 2023, oct"
+                                style="width: 100px; font-size: 11px; padding: 2px;" />
+                        </div>
+                    </th>
+                    <th style="width:12%; border-right: 2px solid #e5e7eb;" class="text-center">Cota del Terreno (msnm)</th>
+                    <th style="width:12%; border-right: 2px solid #e5e7eb;" class="text-center">Cota de Fondo de Pozo (msnm)</th>
+                    <th style="width:12%; border-right: 2px solid #e5e7eb;" class="text-center">Cota Nivel Piezómetro (msnm)</th>
+                    <th style="width:12%; border-right: 2px solid #e5e7eb;" class="text-center">Altura del Pozo (m)</th>
+                    <th style="width:12%; border-right: 2px solid #e5e7eb;" class="text-center">Longitud de Medición (m)</th>
+                    <th style="width:20%;" class="text-center">Comentario</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-medida let-rowIndex="rowIndex">
+                <tr class="hover:bg-primary-100 dark:hover:bg-primary-100 hover:text-highlight-color dark:hover:text-black cursor-pointer"
+                    (click)="onRowClick(medida)">
+                    <td class="text-center">{{ rowIndex +1 }}</td>
+                    <td class="text-center">{{ medida.fechaMedicion | date:'dd/MMM/yyyy' }}</td>
+                    <td class="text-center">{{ medida.cotaActualTerreno | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ medida.cotaFondoPozo | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ medida.cotaNivelPiezometro | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ medida.profundidadActualPozo | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ medida.longitudMedicion | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ medida.comentario }}</td>
+                </tr>
+            </ng-template>
+            <ng-template #emptymessage>
+                <tr>
+                    <td colspan="8">No se encontraron mediciones de piezómetro.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
