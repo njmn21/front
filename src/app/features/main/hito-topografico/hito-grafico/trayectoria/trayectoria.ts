@@ -7,11 +7,11 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ButtonModule } from 'primeng/button';
 
-import { MedidaService } from '../../../../core/services/medida-service';
-import { DataProcessingService } from '../../../../core/services/data-processing.service';
-import { HitoSharedService } from '../../../../core/services/hito-shared.service';
-import { IHitoGet, IMedidaGet } from '../../../../core/interfaces/hito';
-import { chartConfig } from '../../../../core/config/chart-config';
+import { MedidaService } from '../../../../../core/services/medida-service';
+import { DataProcessingService } from '../../../../../core/services/data-processing.service';
+import { HitoSharedService } from '../../../../../core/services/hito-shared.service';
+import { IHitoGet, IMedidaGet } from '../../../../../core/interfaces/hito';
+import { chartConfig } from '../../../../../core/config/chart-config';
 
 @Component({
   selector: 'app-trayectoria',
@@ -136,6 +136,21 @@ export class Trayectoria implements OnInit, OnDestroy {
       const datosHito = medidasPorHito[nombreHito];
       const color = chartConfig.colors[index % chartConfig.colors.length];
 
+      // Calcular los límites de los datos para agregar padding
+      const xValues = datosHito.map(medida => medida.este);
+      const yValues = datosHito.map(medida => medida.norte);
+
+      const minX = Math.min(...xValues);
+      const maxX = Math.max(...xValues);
+      const minY = Math.min(...yValues);
+      const maxY = Math.max(...yValues);
+
+      // Calcular padding como 10% del rango de datos
+      const xRange = maxX - minX;
+      const yRange = maxY - minY;
+      const xPadding = xRange * 0.1 || 1; // Si el rango es 0, usar padding mínimo
+      const yPadding = yRange * 0.1 || 1;
+
       return {
         nombreHito,
         data: {
@@ -148,8 +163,9 @@ export class Trayectoria implements OnInit, OnDestroy {
               })),
               fill: false,
               borderColor: color,
+              borderWidth: 2,
               backgroundColor: color + '20',
-              tension: 0,
+              tension: 0.1,
               pointRadius: datosHito.map((_, i) => (i === 0 || i === datosHito.length - 1 ? 4 : 0)),
               pointBackgroundColor: datosHito.map((_, i) => (i === 0 ? 'orange' : i === datosHito.length - 1 ? 'red' : color)),
               pointBorderColor: datosHito.map((_, i) => (i === 0 ? 'orange' : i === datosHito.length - 1 ? 'red' : color)),
@@ -196,12 +212,22 @@ export class Trayectoria implements OnInit, OnDestroy {
               title: {
                 display: true,
                 text: 'Coordenadas Este (m)'
+              },
+              min: minX - xPadding,
+              max: maxX + xPadding,
+              ticks: {
+                maxTicksLimit: 8
               }
             },
             y: {
               title: {
                 display: true,
                 text: 'Coordenadas Norte (m)'
+              },
+              min: minY - yPadding,
+              max: maxY + yPadding,
+              ticks: {
+                maxTicksLimit: 8
               }
             }
           }
@@ -214,21 +240,39 @@ export class Trayectoria implements OnInit, OnDestroy {
 
   initChart() {
     // Datos de ejemplo como fallback
+    const exampleData = [
+      { x: 0, y: 0 },
+      { x: 1, y: 2 },
+      { x: 2, y: 3 },
+      { x: 3, y: 5 },
+      { x: 4, y: 8 }
+    ];
+
+    // Calcular límites para el gráfico de ejemplo
+    const xValues = exampleData.map(point => point.x);
+    const yValues = exampleData.map(point => point.y);
+
+    const minX = Math.min(...xValues);
+    const maxX = Math.max(...xValues);
+    const minY = Math.min(...yValues);
+    const maxY = Math.max(...yValues);
+
+    // Calcular padding como 15% del rango para mejor visualización en el ejemplo
+    const xRange = maxX - minX;
+    const yRange = maxY - minY;
+    const xPadding = xRange * 0.15 || 1;
+    const yPadding = yRange * 0.15 || 1;
+
     this.dataEsteNorte = [{
       nombreHito: 'Ejemplo',
       data: {
         datasets: [
           {
             label: 'Ejemplo de Trayectoria',
-            data: [
-              { x: 0, y: 0 },
-              { x: 1, y: 2 },
-              { x: 2, y: 3 },
-              { x: 3, y: 5 },
-              { x: 4, y: 8 }
-            ],
+            data: exampleData,
             fill: false,
             borderColor: '#42A5F5',
+            borderWidth: 2,
             backgroundColor: 'rgba(66, 165, 245, 0.1)',
             tension: 0,
             pointRadius: [4, 0, 0, 0, 4], // First and last points visible
@@ -278,12 +322,22 @@ export class Trayectoria implements OnInit, OnDestroy {
             title: {
               display: true,
               text: 'Coordenadas Este (m)'
+            },
+            min: minX - xPadding,
+            max: maxX + xPadding,
+            ticks: {
+              maxTicksLimit: 8
             }
           },
           y: {
             title: {
               display: true,
               text: 'Coordenadas Norte (m)'
+            },
+            min: minY - yPadding,
+            max: maxY + yPadding,
+            ticks: {
+              maxTicksLimit: 8
             }
           }
         }

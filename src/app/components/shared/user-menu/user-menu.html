@@ -1,0 +1,12 @@
+@if (authService.isAuthenticated()) {
+    <div class="flex items-center gap-4 p-2">
+        <!-- <span>{{ authService.currentUser()?.name || authService.currentUser()?.email || 'Usuario' }}</span> -->
+        <p-button 
+          icon="pi pi-sign-out" 
+          label="Cerrar Sesión" 
+          (click)="logout()"
+          severity="secondary"
+          size="small"
+        ></p-button>
+    </div>
+}

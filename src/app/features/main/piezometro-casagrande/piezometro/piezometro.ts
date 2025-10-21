@@ -11,6 +11,7 @@ import { PiezometroService } from '../../../../core/services/piezometro-service'
 import { IPiezometroGet } from '../../../../core/interfaces/piezometro';
 import { ShowPiezometro } from '../../../../components/show-piezometro/show-piezometro';
 import { FormMedidaPiezometro } from '../../../../components/form-medida-piezometro/form-medida-piezometro';
+import { FormPiezometro } from '../../../../components/form-piezometro/form-piezometro';
 
 @Component({
   selector: 'app-piezometro',
@@ -19,7 +20,8 @@ import { FormMedidaPiezometro } from '../../../../components/form-medida-piezome
     CommonModule,
     ShowPiezometro,
     FormMedidaPiezometro,
-    Toast
+    Toast,
+    FormPiezometro
   ],
   providers: [
     ConfirmationService,
@@ -54,8 +56,15 @@ export class Piezometro {
         this.piezometros = data;
         this.initialValue = [...data];
         this.loading = false;
+
+        // Reset cualquier ordenamiento personalizado
+        if (this.dt) {
+          this.dt.reset();
+        }
+        this.isSorted = null;
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error al cargar piezómetros:', error);
         this.piezometros = [];
         this.initialValue = [];
         this.loading = false;
@@ -110,5 +119,18 @@ export class Piezometro {
       detail: mensaje,
       life: 3000
     });
+  }
+
+  onPiezometroCreado(mensaje: string) {
+    // Mostrar toast de éxito
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Piezómetro Creado',
+      detail: mensaje,
+      life: 3000
+    });
+
+    // Recargar la tabla de piezómetros
+    this.cargarPiezometros();
   }
 }

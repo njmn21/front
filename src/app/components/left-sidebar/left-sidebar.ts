@@ -38,17 +38,12 @@ export class LeftSidebar {
     {
       routeLink: '/hito-topograficos',
       icon: 'pi pi-fw pi-pen-to-square',
-      label: 'Hitos y Lecturas'
+      label: 'Hitos Topográficos'
     },
     {
       routeLink: '/piezometro',
       icon: 'pi pi-fw pi-hammer',
-      label: 'Piezómetros'
-    },
-    {
-      routeLink: '/dashboard',
-      icon: 'pi pi-fw pi-chart-bar',
-      label: 'Gráficos'
+      label: 'Piezómetros de Casagrande'
     },
   ];
 

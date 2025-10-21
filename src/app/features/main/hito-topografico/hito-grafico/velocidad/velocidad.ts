@@ -1,20 +1,21 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { generateChartOptions } from '../chart-options';
+import { generateChartOptions } from '../../../hito-topografico/hito-grafico/chart-options';
 import { ChartModule } from 'primeng/chart';
 import { Subscription, Subject } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
+import { DatePickerModule } from 'primeng/datepicker';
 import { takeUntil } from 'rxjs/operators';
 import { Chart } from 'chart.js';
 import { CommonModule } from '@angular/common';
 
-import { IHitoGet } from '../../../../core/interfaces/hito';
-import { MedidaService } from '../../../../core/services/medida-service';
-import { IMedidaGet } from '../../../../core/interfaces/hito';
-import { DataProcessingService } from '../../../../core/services/data-processing.service';
-import { HitoSharedService } from '../../../../core/services/hito-shared.service';
-import { chartConfig } from '../../../../core/config/chart-config';
+import { IHitoGet } from '../../../../../core/interfaces/hito';
+import { MedidaService } from '../../../../../core/services/medida-service';
+import { IMedidaGet } from '../../../../../core/interfaces/hito';
+import { DataProcessingService } from '../../../../../core/services/data-processing.service';
+import { HitoSharedService } from '../../../../../core/services/hito-shared.service';
+import { chartConfig } from '../../../../../core/config/chart-config';
 
 Chart.register({
   id: 'backgroundZonesAverageSpeed',
@@ -73,7 +74,8 @@ Chart.register({
     MultiSelectModule,
     ChartModule,
     ButtonModule,
-    CommonModule
+    CommonModule,
+    DatePickerModule
   ],
   templateUrl: './velocidad.html',
   styleUrl: './velocidad.css'
@@ -89,6 +91,16 @@ export class Velocidad implements OnInit, OnDestroy {
   optionsAverageSpeed: any;
   loading: boolean = true;
   showClearButton: boolean = false;
+
+  // Filtros de fecha
+  startDate: Date | null = null;
+  endDate: Date | null = null;
+  showDateFilters: boolean = false;
+
+  // Datos originales sin filtrar
+  originalMedidas: IMedidaGet[] = [];
+  allFechasUnicas: string[] = [];
+  originalMedidasPorHito: { [key: string]: IMedidaGet[] } = {};
 
   constructor(
     private medidaService: MedidaService,
@@ -123,10 +135,14 @@ export class Velocidad implements OnInit, OnDestroy {
     this.medidaService.getMedidasByIds(hitoIds).subscribe({
       next: (medidas: IMedidaGet[]) => {
         if (medidas && medidas.length > 0) {
+          // Guardar datos originales
+          this.originalMedidas = medidas;
           this.processDataForChart(medidas);
+          this.showDateFilters = true;
         } else {
           console.warn('No se encontraron medidas para los hitos seleccionados');
           this.initChart();
+          this.showDateFilters = false;
         }
         this.loading = false;
         this.showClearButton = true;
@@ -136,6 +152,7 @@ export class Velocidad implements OnInit, OnDestroy {
         this.loading = false;
         this.initChart();
         this.showClearButton = true;
+        this.showDateFilters = false;
       }
     });
   }
@@ -143,6 +160,12 @@ export class Velocidad implements OnInit, OnDestroy {
   clearCharts() {
     this.selectedHitos = [];
     this.showClearButton = false;
+    this.showDateFilters = false;
+    this.startDate = null;
+    this.endDate = null;
+    this.originalMedidas = [];
+    this.allFechasUnicas = [];
+    this.originalMedidasPorHito = {};
     this.initChart();
   }
 
@@ -185,6 +208,10 @@ export class Velocidad implements OnInit, OnDestroy {
 
   processDataForChart(medidas: IMedidaGet[]) {
     const { medidasPorHito, fechasUnicas } = this.dataProcessingService.processMedidas(medidas);
+
+    // Guardar datos originales
+    this.originalMedidasPorHito = medidasPorHito;
+    this.allFechasUnicas = fechasUnicas;
 
     this.dataAverageSpeed = {
       labels: fechasUnicas,
@@ -261,5 +288,53 @@ export class Velocidad implements OnInit, OnDestroy {
     this.optionsAverageSpeed.plugins.backgroundZonesVelocityEnabled = true;
 
     this.cd.markForCheck();
+  }
+
+  // Métodos para filtros de fecha
+  applyDateFilter() {
+    if (!this.originalMedidas.length) return;
+
+    let filteredMedidas = this.originalMedidas;
+
+    // Aplicar filtro de fecha si están definidas
+    if (this.startDate || this.endDate) {
+      filteredMedidas = this.originalMedidas.filter(medida => {
+        const fechaMedida = new Date(medida.fechaMedicion);
+
+        let isAfterStart = true;
+        let isBeforeEnd = true;
+
+        if (this.startDate) {
+          isAfterStart = fechaMedida >= this.startDate;
+        }
+
+        if (this.endDate) {
+          // Agregar un día al endDate para incluir toda la fecha final
+          const endDatePlusOne = new Date(this.endDate);
+          endDatePlusOne.setDate(endDatePlusOne.getDate() + 1);
+          isBeforeEnd = fechaMedida < endDatePlusOne;
+        }
+
+        return isAfterStart && isBeforeEnd;
+      });
+    }
+
+    // Reprocesar los datos con las medidas filtradas
+    this.processDataForChart(filteredMedidas);
+  }
+
+  clearDateFilter() {
+    this.startDate = null;
+    this.endDate = null;
+    // Restaurar datos originales
+    this.processDataForChart(this.originalMedidas);
+  }
+
+  onStartDateChange() {
+    this.applyDateFilter();
+  }
+
+  onEndDateChange() {
+    this.applyDateFilter();
   }
 }

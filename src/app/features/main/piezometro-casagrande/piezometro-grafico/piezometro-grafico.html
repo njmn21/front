@@ -1,0 +1,13 @@
+<div class="flex h-screen ">
+    <!-- Opciones de gráficos - Sidebar izquierdo -->
+    <div class="options w-64 min-w-64 bg-gray-50 p-4">
+        <div class="card">
+            <p-menu [model]="items"></p-menu>
+        </div>
+    </div>
+
+    <!-- Gráfico - Contenido principal -->
+    <div class="chart flex-1 overflow-auto flex flex-col items-center justify-start p-6">
+        <router-outlet></router-outlet>
+    </div>
+</div>

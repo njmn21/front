@@ -12,6 +12,7 @@ import { Deposito } from '../../../core/services/deposito';
 import { IDepositoGet } from '../../../core/interfaces/deposito';
 import { FormDeposito } from '../../../components/form-deposito/form-deposito';
 import { ShowDeposito } from '../../../components/show-deposito/show-deposito';
+import { UserMenu } from '../../../components/shared/user-menu/user-menu';
 
 interface Column {
   field: string;
@@ -26,7 +27,8 @@ interface Column {
     FormDeposito,
     ToastModule,
     ButtonModule,
-    ShowDeposito
+    ShowDeposito,
+    UserMenu
   ],
   providers: [
     ConfirmationService,

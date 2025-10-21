@@ -18,6 +18,21 @@ export interface IMeasurementPiezometroGet {
     profundidadActualPozo: number;
     longitudMedicion: number;
     comentario: string;
+    piezometroId: number;
+}
+
+export interface IPiezometroPost {
+    NombrePiezometro: string;
+    Este: number;
+    Norte: number;
+    Elevacion: number;
+    Ubicacion: string;
+    StickUp: number;
+    CotaActualBocaTubo: number;
+    CotaActualTerreno: number;
+    CotaFondoPozo: number;
+    FechaInstalacion: string;
+    DepositoId: number;
 }
 
 export interface IMesasurementPiezometroPost {

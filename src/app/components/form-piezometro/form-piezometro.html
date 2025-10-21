@@ -1,0 +1,103 @@
+<div class="card">
+    <p-drawer 
+        header="Crear Nuevo Piezómetro" 
+        [(visible)]="visible2" 
+        position="right"
+        styleClass="w-[500px]"
+        (onHide)="clearForm()"
+    >
+        <form 
+            [formGroup]="piezometroForm" 
+            class="card flex flex-col gap-4 p-4"
+        >
+            <div class="card flex flex-col gap-4">
+                <p-floatlabel variant="on" class="w-full">
+                    <input pInputText id="NombrePiezometro" formControlName="NombrePiezometro" autocomplete="off"
+                        class="w-full h-12" />
+                    <label for="NombrePiezometro">Nombre Piezómetro</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full">
+                    <input pInputText id="Este" formControlName="Este" autocomplete="off"
+                        class="w-full h-12" type="number" step="0.01" />
+                    <label for="Este">Este (m)</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full">
+                    <input pInputText id="Norte" formControlName="Norte" autocomplete="off"
+                        class="w-full h-12" type="number" step="0.01" />
+                    <label for="Norte">Norte (m)</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full">
+                    <input pInputText id="Elevacion" formControlName="Elevacion" autocomplete="off"
+                        class="w-full h-12" type="number" step="0.01" />
+                    <label for="Elevacion">Elevación (m)</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full">
+                    <input pInputText id="StickUp" formControlName="StickUp" autocomplete="off"
+                        class="w-full h-12" type="number" step="0.01" />
+                    <label for="StickUp">Stick Up (m)</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full">
+                    <input pInputText id="CotaActualBocaTubo" formControlName="CotaActualBocaTubo" autocomplete="off"
+                        class="w-full h-12" type="number" step="0.01" />
+                    <label for="CotaActualBocaTubo">Cota Actual Boca Tubo (msnm)</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full">
+                    <input pInputText id="CotaActualTerreno" formControlName="CotaActualTerreno" autocomplete="off"
+                        class="w-full h-12" type="number" step="0.01" />
+                    <label for="CotaActualTerreno">Cota Actual Terreno (msnm)</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full">
+                    <input pInputText id="CotaFondoPozo" formControlName="CotaFondoPozo" autocomplete="off"
+                        class="w-full h-12" type="number" step="0.01" />
+                    <label for="CotaFondoPozo">Cota Fondo Pozo (m)</label>
+                </p-floatlabel>
+                <p-select
+                    [options]="depositos"
+                    formControlName="DepositoId" 
+                    optionLabel="nombreDeposito"
+                    optionValue="id"
+                    placeholder="Selecciona un depósito de relave"
+                    class="w-full h-12" [showClear]="true" 
+                />
+                <p-floatlabel 
+                    variant="on" 
+                    class="w-full"
+                >
+                    <p-datepicker 
+                        formControlName="FechaInstalacion" 
+                        [iconDisplay]="'input'" 
+                        [showIcon]="true"
+                        inputId="fechaInstalacion"
+                        class="w-full"
+                        [dateFormat]="'dd/mm/yy'"
+                        inputStyleClass="w-full h-12"
+                    />
+                    <label for="fechaInstalacion">Fecha de Instalación</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full">
+                    <textarea pTextarea id="Ubicacion" formControlName="Ubicacion" rows="4" 
+                        style="resize: none" class="w-full" autocomplete="off"></textarea>
+                    <label for="Ubicacion">Ubicación</label>
+                </p-floatlabel>
+            </div>
+            <div class="flex justify-end mt-4">
+                <p-toast />
+                <p-confirmpopup />
+                <p-button 
+                    type="button" 
+                    label="Guardar" 
+                    [disabled]="piezometroForm.invalid" 
+                    (onClick)="confirm($event)" 
+                />
+            </div>
+        </form>
+    </p-drawer>
+    <div class="flex gap-2 justify-center">
+        <p-button 
+            type="button" 
+            (click)="visible2 = true" 
+            icon="pi pi-plus" 
+            label="Crear"
+        />
+    </div>
+</div>

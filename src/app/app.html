@@ -1,6 +1,10 @@
-<div class="flex h-screen">
+@if (authService.isAuthenticated()) {
+  <div class="flex h-screen">
     <app-left-sidebar></app-left-sidebar>
     <div class="flex-1 flex flex-col">
-        <app-main class="flex-1"></app-main>
+      <app-main class="flex-1"></app-main>
     </div>
-</div>
+  </div>
+} @else {
+  <router-outlet></router-outlet>
+}
