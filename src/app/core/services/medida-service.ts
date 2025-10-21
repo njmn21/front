@@ -52,7 +52,9 @@ export class MedidaService {
           return throwError(() => error);
         })
       );
-  } addMeasurement(medida: IMedidaPost): Observable<IMedidaPost> {
+  }
+
+  addMeasurement(medida: IMedidaPost): Observable<IMedidaPost> {
     const url = `${this.baseUrl}/Tailing/add-measurement`;
     return this.http.post<{ result: IMedidaPost }>(url, medida)
       .pipe(

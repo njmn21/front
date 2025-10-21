@@ -1,0 +1,16 @@
+/* Carousel personalizado - transiciones suaves */
+.transition-opacity {
+  transition: opacity 1s ease-in-out;
+}
+
+/* Estilos específicos para los botones del menú principal */
+::ng-deep .menu-button .p-button {
+  width: 100% !important;
+  min-width: 16rem !important;
+  max-width: 16rem !important;
+}
+
+::ng-deep .menu-button .p-button .p-button-label {
+  text-align: center !important;
+  width: 100% !important;
+}

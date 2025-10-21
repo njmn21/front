@@ -1,7 +1,8 @@
 <div class="flex items-center justify-between mt-8">
     <h2 class="text-2xl font-bold m-0">Piezómetros</h2>
+    <app-form-piezometro (piezometroCreado)="onPiezometroCreado($event)"></app-form-piezometro>
 </div>
-
+<p-toast />
 <div class="card m-4 piezometros-table-container">
     <p-table
         #dt
@@ -62,6 +63,7 @@
                         <p-sortIcon field="estado" />
                     </div>
                 </th>
+                <th class="text-center">Medida</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-piezometro let-rowIndex="rowIndex">
@@ -83,6 +85,13 @@
                     }" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
                         {{ piezometro.estado }}
                     </span>
+                </td>
+                <td class="text-center" (click)="$event.stopPropagation()">
+                    <app-form-medida-piezometro
+                        [piezometroId]="piezometro.piezometroId"
+                        [piezometroNombre]="piezometro.nombrePiezometro"
+                        (medidaPiezometroCreada)="mostrarToast($event)"
+                    ></app-form-medida-piezometro>
                 </td>
             </tr>
         </ng-template>

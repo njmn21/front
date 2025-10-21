@@ -72,6 +72,8 @@ export class Hito {
       detail: mensaje,
       life: 3000
     });
+
+    this.cargarHitos();
   }
 
   customSort(event: any) {

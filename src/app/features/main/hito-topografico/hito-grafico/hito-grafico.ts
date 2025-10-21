@@ -1,27 +1,22 @@
-import { CommonModule } from '@angular/common';
-import { Menubar } from 'primeng/menubar';
+import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
+import { Menu } from 'primeng/menu';
 import { RouterOutlet } from '@angular/router';
 
-import { Component, OnInit } from '@angular/core';
-import { ChartModule } from 'primeng/chart';
-import { HitoService } from '../../../core/services/hito-service';
-import { HitoSharedService } from '../../../core/services/hito-shared.service';
-import { IHitoGet } from '../../../core/interfaces/hito';
-
+import { HitoService } from '../../../../core/services/hito-service';
+import { HitoSharedService } from '../../../../core/services/hito-shared.service';
+import { IHitoGet } from '../../../../core/interfaces/hito';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-hito-grafico',
   imports: [
-    ChartModule,
-    CommonModule,
-    Menubar,
-    RouterOutlet,
+    Menu,
+    RouterOutlet
   ],
-  templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css'
+  templateUrl: './hito-grafico.html',
+  styleUrl: './hito-grafico.css'
 })
-export class Dashboard implements OnInit {
+export class HitoGrafico implements OnInit {
   items: MenuItem[] | undefined;
 
   constructor(

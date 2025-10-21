@@ -7,14 +7,15 @@ import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ButtonModule } from 'primeng/button';
+import { DatePickerModule } from 'primeng/datepicker';
 
-import { IHitoGet } from '../../../../core/interfaces/hito';
-import { MedidaService } from '../../../../core/services/medida-service';
-import { IMedidaGet } from '../../../../core/interfaces/hito';
-import { DataProcessingService } from '../../../../core/services/data-processing.service';
-import { HitoSharedService } from '../../../../core/services/hito-shared.service';
-import { chartOptions, generateChartOptions } from '../chart-options';
-import { chartConfig } from '../../../../core/config/chart-config';
+import { IHitoGet } from '../../../../../core/interfaces/hito';
+import { MedidaService } from '../../../../../core/services/medida-service';
+import { IMedidaGet } from '../../../../../core/interfaces/hito';
+import { DataProcessingService } from '../../../../../core/services/data-processing.service';
+import { HitoSharedService } from '../../../../../core/services/hito-shared.service';
+import { chartOptions, generateChartOptions } from '../../../hito-topografico/hito-grafico/chart-options';
+import { chartConfig } from '../../../../../core/config/chart-config';
 
 Chart.register({
   id: 'backgroundZonesTotal',
@@ -77,7 +78,8 @@ Chart.register({
     MultiSelectModule,
     ChartModule,
     CommonModule,
-    ButtonModule
+    ButtonModule,
+    DatePickerModule
   ],
   templateUrl: './desplazamiento.html',
   styleUrl: './desplazamiento.css'
@@ -100,6 +102,16 @@ export class Desplazamiento implements OnInit, OnDestroy {
   optionsAverageSpeed: any;
   loading: boolean = false;
   showClearButton: boolean = false;
+
+  // Filtros de fecha
+  startDate: Date | null = null;
+  endDate: Date | null = null;
+  showDateFilters: boolean = false;
+
+  // Datos originales sin filtrar
+  originalMedidas: IMedidaGet[] = [];
+  allFechasUnicas: string[] = [];
+  originalMedidasPorHito: { [key: string]: IMedidaGet[] } = {};
 
 
   constructor(
@@ -135,11 +147,15 @@ export class Desplazamiento implements OnInit, OnDestroy {
     this.medidaService.getMedidasByIds(hitoIds).subscribe({
       next: (medidas: IMedidaGet[]) => {
         if (medidas && medidas.length > 0) {
+          // Guardar datos originales
+          this.originalMedidas = medidas;
           this.processDataForChart(medidas);
+          this.showDateFilters = true;
         } else {
           // mostrar mensaje o datos vacios si no hay datos
           console.warn('No se encontraron medidas para los hitos seleccionados');
           this.initChart();
+          this.showDateFilters = false;
         }
         this.loading = false;
         this.showClearButton = true; // boton limpiar despues de graficar
@@ -155,6 +171,7 @@ export class Desplazamiento implements OnInit, OnDestroy {
         console.warn(errorMessage);
         this.loading = false;
         this.showClearButton = true;
+        this.showDateFilters = false;
         this.initChart();
       }
     });
@@ -163,6 +180,12 @@ export class Desplazamiento implements OnInit, OnDestroy {
   clearCharts() {
     this.selectedHitos = [];
     this.showClearButton = false;
+    this.showDateFilters = false;
+    this.startDate = null;
+    this.endDate = null;
+    this.originalMedidas = [];
+    this.allFechasUnicas = [];
+    this.originalMedidasPorHito = {};
     this.initChart();
   }
 
@@ -217,6 +240,10 @@ export class Desplazamiento implements OnInit, OnDestroy {
   processDataForChart(medidas: IMedidaGet[]) {
     const { medidasPorHito, fechasUnicas } = this.dataProcessingService.processMedidas(medidas);
 
+    // Guardar datos originales
+    this.originalMedidasPorHito = medidasPorHito;
+    this.allFechasUnicas = fechasUnicas;
+
     this.data = {
       labels: fechasUnicas,
       datasets: this.createDataset(medidasPorHito, fechasUnicas, 'horizontalAbsoluto', chartConfig.colors)
@@ -263,6 +290,7 @@ export class Desplazamiento implements OnInit, OnDestroy {
         data: data,
         fill: false,
         borderColor: color,
+        borderWidth: 2,
         backgroundColor: color + '20',
         tension: 0,
         pointBackgroundColor: color,
@@ -283,6 +311,7 @@ export class Desplazamiento implements OnInit, OnDestroy {
           data: [0.12, 0.19, 0.03, 0.05, 0.02, 0.03, 0.07],
           fill: false,
           borderColor: '#42A5F5',
+          borderWidth: 2,
           backgroundColor: 'rgba(66, 165, 245, 0.1)',
           tension: 0, //cambiar la forma de la linea 0.4
           pointBackgroundColor: '#42A5F5',
@@ -300,6 +329,7 @@ export class Desplazamiento implements OnInit, OnDestroy {
           data: [0.08, 0.15, 0.02, 0.04, 0.01, 0.02, 0.05],
           fill: false,
           borderColor: '#66BB6A',
+          borderWidth: 2,
           backgroundColor: 'rgba(102, 187, 106, 0.1)',
           tension: 0, //cambiar la forma de la linea 0.4
           pointBackgroundColor: '#66BB6A',
@@ -317,6 +347,7 @@ export class Desplazamiento implements OnInit, OnDestroy {
           data: [0.14, 0.24, 0.04, 0.07, 0.02, 0.04, 0.09],
           fill: false,
           borderColor: '#FF7043',
+          borderWidth: 2,
           backgroundColor: 'rgba(255, 112, 67, 0.1)',
           tension: 0, //cambiar la forma de la linea 0.4
           pointBackgroundColor: '#FF7043',
@@ -352,5 +383,53 @@ export class Desplazamiento implements OnInit, OnDestroy {
     };
 
     this.cd.markForCheck();
+  }
+
+  // Métodos para filtros de fecha
+  applyDateFilter() {
+    if (!this.originalMedidas.length) return;
+
+    let filteredMedidas = this.originalMedidas;
+
+    // Aplicar filtro de fecha si están definidas
+    if (this.startDate || this.endDate) {
+      filteredMedidas = this.originalMedidas.filter(medida => {
+        const fechaMedida = new Date(medida.fechaMedicion);
+
+        let isAfterStart = true;
+        let isBeforeEnd = true;
+
+        if (this.startDate) {
+          isAfterStart = fechaMedida >= this.startDate;
+        }
+
+        if (this.endDate) {
+          // Agregar un día al endDate para incluir toda la fecha final
+          const endDatePlusOne = new Date(this.endDate);
+          endDatePlusOne.setDate(endDatePlusOne.getDate() + 1);
+          isBeforeEnd = fechaMedida < endDatePlusOne;
+        }
+
+        return isAfterStart && isBeforeEnd;
+      });
+    }
+
+    // Reprocesar los datos con las medidas filtradas
+    this.processDataForChart(filteredMedidas);
+  }
+
+  clearDateFilter() {
+    this.startDate = null;
+    this.endDate = null;
+    // Restaurar datos originales
+    this.processDataForChart(this.originalMedidas);
+  }
+
+  onStartDateChange() {
+    this.applyDateFilter();
+  }
+
+  onEndDateChange() {
+    this.applyDateFilter();
   }
 }
