@@ -13,7 +13,7 @@ export class HitoService {
   constructor(private http: HttpClient) { }
 
   getAllHitos(): Observable<IHitoGet[]> {
-    const url = `${this.baseUrl}/Tailing/get-all-landmarks`;
+    const url = `${this.baseUrl}/Topographic/get-all-landmarks`;
     return this.http.get<{ result: IHitoGet[] }>(url)
       .pipe(
         map(response => response.result),
@@ -25,7 +25,7 @@ export class HitoService {
   }
 
   getAllHitosWithCoordinates(): Observable<IHitoGetWithCoordinates[]> {
-    const url = `${this.baseUrl}/Tailing/get-all-landmarks-with-coordinates`;
+    const url = `${this.baseUrl}/Topographic/get-all-landmarks-with-coordinates`;
     return this.http.get<{ result: IHitoGetWithCoordinates[] }>(url)
       .pipe(
         map(response => response.result),
@@ -37,7 +37,7 @@ export class HitoService {
   }
 
   addHito(hito: IHitoPost): Observable<IHitoPost> {
-    const url = `${this.baseUrl}/Tailing/add-landmark`;
+    const url = `${this.baseUrl}/Topographic/add-landmark`;
     return this.http.post<{ result: IHitoPost }>(url, hito)
       .pipe(
         map((response: any) => response.result),

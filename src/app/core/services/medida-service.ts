@@ -14,7 +14,7 @@ export class MedidaService {
   constructor(private http: HttpClient) { }
 
   getMedidasById(id: number): Observable<IMedidaGet[]> {
-    const url = `${this.baseUrl}/Tailing/get-measurements-by-landmark-id/${id}`;
+    const url = `${this.baseUrl}/Topographic/get-measurements-by-landmark-id/${id}`;
 
     return this.http.get<{ result: IMedidaGet[] }>(url)
       .pipe(
@@ -28,7 +28,7 @@ export class MedidaService {
   }
 
   getMaxMedidaById(id: number): Observable<IMaxMedidaGet> {
-    const url = `${this.baseUrl}/Tailing/get-max-measurement-by-landmark-id/${id}`;
+    const url = `${this.baseUrl}/Topographic/get-max-measurement-by-landmark-id/${id}`;
 
     return this.http.get<{ result: IMaxMedidaGet }>(url)
       .pipe(
@@ -41,7 +41,7 @@ export class MedidaService {
   }
 
   getMedidasByIds(hitoIds: number[]): Observable<IMedidaGet[]> {
-    const url = `${this.baseUrl}/Tailing/get-measurements-by-landmark-ids`;
+    const url = `${this.baseUrl}/Topographic/get-measurements-by-landmark-ids`;
     const requestBody = { hitoIds };
 
     return this.http.post<{ result: IMedidaGet[] }>(url, requestBody)
@@ -55,7 +55,7 @@ export class MedidaService {
   }
 
   addMeasurement(medida: IMedidaPost): Observable<IMedidaPost> {
-    const url = `${this.baseUrl}/Tailing/add-measurement`;
+    const url = `${this.baseUrl}/Topographic/add-measurement`;
     return this.http.post<{ result: IMedidaPost }>(url, medida)
       .pipe(
         map((response: any) => response.result),
@@ -67,7 +67,7 @@ export class MedidaService {
   }
 
   editMeasurement(medicionId: number, medidaEdit: any): Observable<any> {
-    const url = `${this.baseUrl}/Tailing/edit-measurement/${medicionId}`;
+    const url = `${this.baseUrl}/Topographic/edit-measurement/${medicionId}`;
     return this.http.put<any>(url, medidaEdit)
       .pipe(
         map(response => response),
