@@ -39,7 +39,7 @@ export class Login {
   errorMessage = signal('');
 
   loginForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required]],
     password: ['', Validators.required]
   });
 
