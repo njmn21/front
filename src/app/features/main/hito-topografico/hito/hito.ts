@@ -5,7 +5,7 @@ import {
   ConfirmationService,
   MessageService
 } from 'primeng/api';
-import { Toast } from "primeng/toast";
+import { ToastModule } from "primeng/toast";
 
 import { HitoService } from '../../../../core/services/hito-service';
 import { FormHito } from '../../../../components/form-hito/form-hito';
@@ -18,7 +18,7 @@ import { ShowHito } from '../../../../components/show-hito/show-hito';
   imports: [
     TableModule,
     CommonModule,
-    Toast,
+    ToastModule,
     FormHito,
     FormMedida,
     ShowHito
@@ -124,5 +124,15 @@ export class Hito {
   onRowClick(hito: IHitoGetWithCoordinates) {
     this.selectedHito = hito;
     this.showDialog = true;
+  }
+
+  closeDialog() {
+    this.showDialog = false;
+    this.selectedHito = null;
+  }
+
+  onHitoUpdated() {
+    this.cargarHitos();
+    this.closeDialog();
   }
 }

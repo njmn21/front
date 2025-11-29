@@ -13,6 +13,7 @@ import { Lecturas } from './piezometro-casagrande/lecturas/lecturas';
 import { HitoGrafico } from './hito-topografico/hito-grafico/hito-grafico';
 import { PiezometroGrafico } from './piezometro-casagrande/piezometro-grafico/piezometro-grafico';
 import { PiezometroDs } from './piezometro-casagrande/piezometro-grafico/piezometro-ds/piezometro-ds';
+import { UbicacionesMapa } from './ubicaciones-mapa/ubicaciones-mapa';
 
 export const MAIN_ROUTES: Routes = [
     {
@@ -56,6 +57,10 @@ export const MAIN_ROUTES: Routes = [
                 ]
             }
         ]
+    },
+    {
+        path: 'ubicacion-mapa',
+        component: UbicacionesMapa
     },
     { path: '**', redirectTo: 'inicio' }
 ];

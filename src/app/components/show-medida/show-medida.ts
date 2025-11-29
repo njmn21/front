@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
-import { IMedidaGet } from '../../core/interfaces/hito';
+import { IMedidaGet, IMedidaPost } from '../../core/interfaces/hito';
 import { Dialog } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -7,6 +7,9 @@ import { CommonModule } from '@angular/common';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { FormsModule } from '@angular/forms';
 import { DatePicker } from 'primeng/datepicker';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmationService, MessageService } from 'primeng/api';
+
 import { MedidaService } from '../../core/services/medida-service';
 
 @Component({
@@ -18,8 +21,10 @@ import { MedidaService } from '../../core/services/medida-service';
     CommonModule,
     FloatLabelModule,
     FormsModule,
-    DatePicker
+    DatePicker,
+    ToastModule
   ],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './show-medida.html',
   styleUrl: './show-medida.css'
 })
@@ -33,7 +38,10 @@ export class ShowMedida implements OnChanges {
   editForm: any = {};
   isLoading: boolean = false;
 
-  constructor(private medidaService: MedidaService) { }
+  constructor(
+    private medidaService: MedidaService,
+    private messageService: MessageService,
+  ) { }
 
   ngOnChanges() {
     if (this.medida) {
@@ -77,23 +85,26 @@ export class ShowMedida implements OnChanges {
     if (!this.medida || !this.editForm) return;
 
     this.isLoading = true;
-    const editData = {
-      FechaMedicion: this.formatDate(this.editForm.fechaMedicion),
+    const medidaEdit: IMedidaPost = {
       Este: this.editForm.este,
       Norte: this.editForm.norte,
-      Elevacion: this.editForm.elevacion
+      Elevacion: this.editForm.elevacion,
+      FechaMedicion: this.formatDate(this.editForm.fechaMedicion),
+      HitoId: this.medida.hitoId,
+      EsBase: false
     };
 
-    this.medidaService.editMeasurement(this.medida.medicionId, editData).subscribe({
-      next: (response) => {
+    this.medidaService.editMeasurement(this.medida.medicionId, medidaEdit).subscribe({
+      next: () => {
         this.isLoading = false;
         this.isEditMode = false;
+        this.mostrarToast('Medida actualizada correctamente.');
         this.medidaUpdated.emit();
-        console.log('Medición actualizada exitosamente:', response);
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Error al actualizar medición:', error);
+        console.error('Error al actualizar medida:', error);
+        this.mostrarToastError('Error al actualizar la medida. Por favor, inténtelo de nuevo.');
       }
     });
   }
@@ -111,5 +122,23 @@ export class ShowMedida implements OnChanges {
   cerrar() {
     this.isEditMode = false;
     this.close.emit();
+  }
+
+  mostrarToast(mensaje: string) {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Éxito',
+      detail: mensaje,
+      life: 3000
+    });
+  }
+
+  mostrarToastError(mensaje: string) {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: mensaje,
+      life: 3000
+    });
   }
 }

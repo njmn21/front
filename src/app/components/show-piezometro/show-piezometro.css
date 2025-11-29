@@ -1,0 +1,21 @@
+.edit-mode input:not([readonly]) {
+    border-color: #3b82f6;
+    background-color: #f8fafc;
+}
+
+.edit-mode input:not([readonly]):focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #3b82f6;
+    border-color: #1d4ed8;
+}
+
+.edit-mode textarea:not([readonly]) {
+    border-color: #3b82f6;
+    background-color: #f8fafc;
+}
+
+.edit-mode textarea:not([readonly]):focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #3b82f6;
+    border-color: #1d4ed8;
+}

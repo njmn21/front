@@ -58,3 +58,11 @@
         </p-table>
     </div>
 </div>
+
+<app-show-medida-piezometro
+    [medida]="selectedMedida"
+    [visible]="showDialog"
+    (close)="closeDialog()"
+    (medidaUpdated)="onMedidaUpdated()"
+>    
+</app-show-medida-piezometro>

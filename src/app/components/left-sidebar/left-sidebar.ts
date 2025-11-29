@@ -45,6 +45,11 @@ export class LeftSidebar {
       icon: 'pi pi-fw pi-hammer',
       label: 'Piezómetros de Casagrande'
     },
+    // {
+    //   routeLink: '/ubicacion-mapa',
+    //   icon: 'pi pi-fw pi-map',
+    //   label: 'Ubicaciones en Mapa'
+    // }
   ];
 
   closeCallback(e: any): void {

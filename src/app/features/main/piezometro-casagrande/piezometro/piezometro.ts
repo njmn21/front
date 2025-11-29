@@ -133,4 +133,20 @@ export class Piezometro {
     // Recargar la tabla de piezómetros
     this.cargarPiezometros();
   }
+
+  onPiezometroActualizado(mensaje: string) {
+    // Mostrar toast de éxito
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Piezómetro Actualizado',
+      detail: mensaje,
+      life: 3000
+    });
+
+    // Recargar la tabla de piezómetros para reflejar los cambios
+    this.cargarPiezometros();
+
+    // Cerrar el diálogo
+    this.showDialog = false;
+  }
 }

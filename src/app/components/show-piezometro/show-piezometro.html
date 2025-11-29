@@ -4,47 +4,121 @@
         [(visible)]="visible"
         [modal]="true"
         [dismissableMask]="true"
-        [style]="{ width: '25rem' }"
+        [style]="{ width: '40rem' }"
         (onHide)="cerrar()"
     >
         @if (piezometro) {
-            <div class="m-2">
-                <div class="flex flex-col gap-4">
+            <div class="m-2" [ngClass]="{'edit-mode': isEditMode}">
+                <div class="grid grid-cols-2 gap-4">
                     <p-floatlabel variant="on" class="w-full mb-3">
-                        <input pInputText [value]="piezometro.nombrePiezometro" class="w-full h-12" readonly />
+                        @if (isEditMode){
+                            <input pInputText [(ngModel)]="editForm.nombrePiezometro" class="w-full h-12" />
+                        } @else {
+                            <input pInputText [value]="piezometro.nombrePiezometro" class="w-full h-12" readonly />
+                        }
                         <label>Cód. Piezómetro</label>
                     </p-floatlabel>
                     <p-floatlabel variant="on" class="w-full mb-3">
-                        <input pInputText [value]="piezometro.este | number:'1.2-2'" class="w-full h-12" readonly />
-                        <label>Este</label>
+                        @if (isEditMode){
+                            <input pInputText [(ngModel)]="editForm.este" class="w-full h-12" type="number" step="0.01" />
+                        } @else {
+                            <input pInputText [value]="piezometro.este | number:'1.2-2'" class="w-full h-12" readonly />
+                        }
+                        <label>Este (m)</label>
                     </p-floatlabel>
                     <p-floatlabel variant="on" class="w-full mb-3">
-                        <input pInputText [value]="piezometro.norte | number:'1.2-2'" class="w-full h-12" readonly />
-                        <label>Norte</label>
+                        @if (isEditMode){
+                            <input pInputText [(ngModel)]="editForm.norte" class="w-full h-12" type="number" step="0.01" />
+                        } @else {
+                            <input pInputText [value]="piezometro.norte | number:'1.2-2'" class="w-full h-12" readonly />
+                        }
+                        <label>Norte (m)</label>
                     </p-floatlabel>
                     <p-floatlabel variant="on" class="w-full mb-3">
-                        <input pInputText [value]="piezometro.elevacion | number:'1.2-2'" class="w-full h-12" readonly />
-                        <label>Elevación</label>
+                        @if (isEditMode){
+                            <input pInputText [(ngModel)]="editForm.elevacion" class="w-full h-12" type="number" step="0.01" />
+                        } @else {
+                            <input pInputText [value]="piezometro.elevacion | number:'1.2-2'" class="w-full h-12" readonly />
+                        }
+                        <label>Elevación (m)</label>
                     </p-floatlabel>
                     <p-floatlabel variant="on" class="w-full mb-3">
-                        <input pInputText [value]="piezometro.ubicacion" class="w-full h-12" readonly />
-                        <label>Ubicación</label>
+                        @if (isEditMode){
+                            <input pInputText [(ngModel)]="editForm.stickUp" class="w-full h-12" type="number" step="0.01" />
+                        } @else {
+                            <input pInputText [value]="piezometro.stickUp | number:'1.2-2'" class="w-full h-12" readonly />
+                        }
+                        <label>Stick Up (m)</label>
                     </p-floatlabel>
                     <p-floatlabel variant="on" class="w-full mb-3">
-                        <input
-                            pInputText
-                            [value]="piezometro.fecha_instalacion | date:'dd/MM/yyyy'"
-                            class="w-full h-12"
-                            readonly
-                        />
-                        <label>Fecha Instalación</label>
+                        @if (isEditMode){
+                            <input pInputText [(ngModel)]="editForm.cotaActualBocaTubo" class="w-full h-12" type="number" step="0.01" />
+                        } @else {
+                            <input pInputText [value]="piezometro.cotaActualBocaTubo | number:'1.2-2'" class="w-full h-12" readonly />
+                        }
+                        <label>Cota Actual Boca Tubo (msnm)</label>
                     </p-floatlabel>
                     <p-floatlabel variant="on" class="w-full mb-3">
-                        <input pInputText [value]="piezometro.estado" class="w-full h-12" readonly />
+                        @if (isEditMode){
+                            <input pInputText [(ngModel)]="editForm.cotaActualTerreno" class="w-full h-12" type="number" step="0.01" />
+                        } @else {
+                            <input pInputText [value]="piezometro.cotaActualTerreno | number:'1.2-2'" class="w-full h-12" readonly />
+                        }
+                        <label>Cota Actual Terreno (msnm)</label>
+                    </p-floatlabel>
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        @if (isEditMode){
+                            <input pInputText [(ngModel)]="editForm.cotaFondoPozo" class="w-full h-12" type="number" step="0.01" />
+                        } @else {
+                            <input pInputText [value]="piezometro.cotaFondoPozo | number:'1.2-2'" class="w-full h-12" readonly />
+                        }
+                        <label>Cota Fondo Pozo (m)</label>
+                    </p-floatlabel>
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        @if (isEditMode){
+                            <input pInputText [(ngModel)]="editForm.estado" class="w-full h-12" />
+                        } @else {
+                            <input pInputText [value]="piezometro.estado" class="w-full h-12" readonly />
+                        }
                         <label>Estado</label>
                     </p-floatlabel>
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        @if (isEditMode){
+                            <p-datepicker [(ngModel)]="editForm.fechaInstalacion" dateFormat="dd/mm/yy" [showIcon]="true"
+                                inputStyleClass="w-full h-12" placeholder="Seleccione una fecha"
+                                class="w-full" inputId="fechaInstalacion"
+                                appendTo="body">
+                            </p-datepicker>
+                        } @else {
+                            <input
+                                pInputText
+                                [value]="piezometro.fechaInstalacion | date:'dd/MM/yyyy'"
+                                class="w-full h-12"
+                                readonly
+                            />
+                        }                        
+                        <label>Fecha Instalación</label>
+                    </p-floatlabel>
                 </div>
+                <p-floatlabel variant="on" class="w-full mb-3">
+                    @if (isEditMode){
+                        <textarea pTextarea [(ngModel)]="editForm.ubicacion" rows="4" style="resize: none" class="w-full"></textarea>
+                    } @else {
+                        <textarea pTextarea [value]="piezometro.ubicacion" rows="4" style="resize: none" class="w-full" readonly></textarea>
+                    }
+                    <label>Ubicación</label>
+                </p-floatlabel>
             </div>
         }
+        <div class="flex justify-end gap-2 mt-4">
+            @if (isEditMode) {
+                <p-button label="Cancelar" severity="secondary" (click)="cancelEdit()" [disabled]="isLoading" />
+                <p-button label="Guardar" severity="success" (click)="saveChanges()" [loading]="isLoading" />
+            } @else {
+                <p-button label="Editar" severity="info" (click)="enableEditMode()" />
+                <p-button label="Cerrar" severity="secondary" (click)="cerrar()" />
+            }
+        </div>
     </p-dialog>
+    <p-toast />
 </div>

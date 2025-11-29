@@ -4,9 +4,14 @@ export interface IPiezometroGet {
     este: number;
     norte: number;
     elevacion: number;
+    stickUp: number;
+    cotaActualBocaTubo: number;
+    cotaActualTerreno: number;
+    cotaFondoPozo: number;
+    fechaInstalacion: string;
     ubicacion: string;
-    fecha_instalacion: string;
     estado: string;
+    depositoId: number;
 }
 
 export interface IMeasurementPiezometroGet {
@@ -40,4 +45,14 @@ export interface IMesasurementPiezometroPost {
     Comentario: string;
     FechaMedicion: string;
     PiezometerId: number;
+}
+
+export interface IPutPiezometro extends IPiezometroPost {
+    Estado: string;
+}
+
+export interface IPutMeasurementPiezometro {
+    LongitudMedicion: number;
+    Comentario: string;
+    FechaMedicion: string;
 }

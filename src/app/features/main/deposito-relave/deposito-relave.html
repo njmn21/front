@@ -12,7 +12,7 @@
         [value]="depositos" 
         [tableStyle]="{ 'min-width': '50rem' }" 
         [loading]="loading"
-        styleClass="table-auto"
+        class="table-auto"
     >
         <ng-template pTemplate="header" let-columns>
             <tr>
@@ -48,6 +48,8 @@
   <app-show-deposito
     [deposito]="depositoSeleccionado"
     [visible]="showDepositoVisible"
-    (close)="showDepositoVisible = false">
+    (close)="showDepositoVisible = false"
+    (depositoUpdated)="onDepositoUpdated()"
+  >
   </app-show-deposito>
 }

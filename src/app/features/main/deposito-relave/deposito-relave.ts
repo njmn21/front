@@ -93,4 +93,30 @@ export class DepositoRelave {
     this.depositoSeleccionado = deposito;
     this.showDepositoVisible = true;
   }
+
+  onDepositoUpdated() {
+    if (this.depositoSeleccionado && this.depositoSeleccionado.id) {
+      this.loading = true;
+      this.depositoService.getAllDepositos().subscribe({
+        next: data => {
+          this.depositos = data;
+          this.loading = false;
+          this.mostrarToast('Depósito actualizado exitosamente');
+          this.closeDialog();
+        },
+        error: (error) => {
+          console.error('Error al recargar datos:', error);
+          this.loading = false;
+          this.closeDialog();
+        }
+      });
+    } else {
+      this.closeDialog();
+    }
+  }
+
+  closeDialog() {
+    this.showDepositoVisible = false;
+    this.depositoSeleccionado = null;
+  }
 }

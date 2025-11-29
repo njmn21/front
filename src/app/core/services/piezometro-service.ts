@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, throwError, map } from 'rxjs';
-import { IMeasurementPiezometroGet, IMesasurementPiezometroPost, IPiezometroGet, IPiezometroPost } from '../interfaces/piezometro';
+import { IMeasurementPiezometroGet, IMesasurementPiezometroPost, IPiezometroGet, IPiezometroPost, IPutMeasurementPiezometro, IPutPiezometro } from '../interfaces/piezometro';
 
 @Injectable({
   providedIn: 'root'
@@ -65,6 +65,30 @@ export class PiezometroService {
         map(response => response.result),
         catchError(error => {
           console.error('Error al crear piezómetro:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  updatePiezometro(piezometroId: number, piezometro: IPutPiezometro): Observable<IPutPiezometro> {
+    const url = `${this.baseUrl}/Piezometer/update-piezometer/${piezometroId}`;
+    return this.http.put<{ result: IPutPiezometro }>(url, piezometro)
+      .pipe(
+        map(response => response.result),
+        catchError(error => {
+          console.error('Error al actualizar piezómetro:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  updateMeasurement(measurementId: number, measurement: IPutMeasurementPiezometro): Observable<IPutMeasurementPiezometro> {
+    const url = `${this.baseUrl}/Piezometer/update-measurement-piezometer/${measurementId}`;
+    return this.http.put<{ result: IPutMeasurementPiezometro }>(url, measurement)
+      .pipe(
+        map(response => response.result),
+        catchError(error => {
+          console.error('Error al actualizar medida:', error);
           return throwError(() => error);
         })
       );

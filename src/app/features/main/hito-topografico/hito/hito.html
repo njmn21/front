@@ -92,5 +92,6 @@
 <app-show-hito 
     [hito]="selectedHito" 
     [visible]="showDialog" 
-    (close)="showDialog = false">
-</app-show-hito>
+    (close)="closeDialog()"
+    (hitoUpdated)="onHitoUpdated()"
+></app-show-hito>

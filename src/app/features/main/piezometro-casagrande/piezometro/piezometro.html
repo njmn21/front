@@ -51,10 +51,10 @@
                         <p-sortIcon field="ubicacion" />
                     </div>
                 </th>
-                <th pSortableColumn="fecha_instalacion" class="text-center">
+                <th pSortableColumn="fechaInstalacion" class="text-center">
                     <div class="flex items-center gap-2 justify-center">
                         Fecha Instalación
-                        <p-sortIcon field="fecha_instalacion" />
+                        <p-sortIcon field="fechaInstalacion" />
                     </div>
                 </th>
                 <th pSortableColumn="estado" class="text-center">
@@ -77,7 +77,7 @@
                 <td class="text-center">{{ piezometro.norte | number:'1.2-2' }}</td>
                 <td class="text-center">{{ piezometro.elevacion | number:'1.2-2' }}</td>
                 <td class="text-center truncate" title="{{ piezometro.ubicacion }}">{{ piezometro.ubicacion }}</td>
-                <td class="text-center">{{ piezometro.fecha_instalacion | date:'dd/MM/yyyy' }}</td>
+                <td class="text-center">{{ piezometro.fechaInstalacion | date:'dd/MM/yyyy' }}</td>
                 <td class="text-center">
                     <span [ngClass]="{
                         'bg-green-100 text-green-800': piezometro.estado === 'Activo',
@@ -102,5 +102,6 @@
     [piezometro]="selectedPiezometro"
     [visible]="showDialog"
     (close)="showDialog = false"
+    (piezometroActualizado)="onPiezometroActualizado($event)"
 >
 </app-show-piezometro>

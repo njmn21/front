@@ -47,7 +47,7 @@ export class Inicio implements OnInit, OnDestroy {
   private startAutoplay() {
     this.intervalId = setInterval(() => {
       this.nextSlide();
-    }, 5000); // Cambiar cada 5 segundos
+    }, 3000); // Cambiar cada 3 segundos
   }
 
   private stopAutoplay() {
@@ -78,5 +78,9 @@ export class Inicio implements OnInit, OnDestroy {
 
   navigateToPiezometros() {
     this.router.navigate(['/piezometro']);
+  }
+
+  navigateToMonitoreo() {
+    this.router.navigate(['/ubicacion-mapa']);
   }
 }

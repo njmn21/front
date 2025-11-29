@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../core/services/auth-service';
 import { LoginRequest } from '../../core/interfaces/auth';
@@ -14,6 +15,7 @@ import { LoginRequest } from '../../core/interfaces/auth';
 @Component({
   selector: 'app-login',
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     CardModule,
     FloatLabel,
@@ -29,6 +31,9 @@ export class Login {
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
+
+  bgImageUrl = '/veta-dorada6.png';
+  logoUrl = '/logo_home.png';
 
   loading = signal(false);
   errorMessage = signal('');
@@ -47,8 +52,8 @@ export class Login {
         next: () => {
           this.router.navigate(['/inicio']);
         },
-        error: (error: any) => {
-          this.errorMessage.set('Error al iniciar sesión. Verifique sus credenciales.' + error);
+        error: () => {
+          this.errorMessage.set('Error al iniciar sesión. Verifique sus credenciales.');
           this.loading.set(false);
         },
         complete: () => {

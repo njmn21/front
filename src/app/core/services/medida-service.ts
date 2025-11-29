@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, catchError, throwError } from 'rxjs';
 import { IMedidaGet, IMedidaPost, IMaxMedidaGet } from '../interfaces/hito';
+import { IDepositoPost } from '../interfaces/deposito';
 
 @Injectable({
   providedIn: 'root'
@@ -66,11 +67,11 @@ export class MedidaService {
       );
   }
 
-  editMeasurement(medicionId: number, medidaEdit: any): Observable<any> {
+  editMeasurement(medicionId: number, medidaEdit: IMedidaPost): Observable<IMedidaPost> {
     const url = `${this.baseUrl}/Topographic/edit-measurement/${medicionId}`;
-    return this.http.put<any>(url, medidaEdit)
+    return this.http.put<{ result: IMedidaPost }>(url, medidaEdit)
       .pipe(
-        map(response => response),
+        map((response: any) => response.result),
         catchError(error => {
           console.error('Error al editar medida:', error);
           return throwError(() => error);

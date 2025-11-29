@@ -1,0 +1,76 @@
+<p-toast />
+<div class="card flex justify-center">
+    <p-dialog
+        [header]="isEditMode ? 'Editar Lectura' : 'Detalle Lectura'"
+        [(visible)]="visible"
+        [modal]="true"
+        [dismissableMask]="true"
+        [style]="{ width: '40rem' }"
+        (onHide)="cerrar()"
+    >
+        @if (medida) {
+            <div class="m-2" [ngClass]="{'edit-mode': isEditMode}">
+                <div class="grid grid-cols-2 gap-4">
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        <input pInputText [value]="medida.cotaActualTerreno | number:'1.2-2'" class="w-full h-12" readonly />
+                        <label>Cota Actual Terreno (msnm)</label>
+                    </p-floatlabel>
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        <input pInputText [value]="medida.cotaFondoPozo | number:'1.2-2'" class="w-full h-12" readonly />
+                        <label>Cota Fondo Pozo (msnm)</label>
+                    </p-floatlabel>
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        <input pInputText [value]="medida.cotaNivelPiezometro | number:'1.2-2'" class="w-full h-12" readonly />
+                        <label>Cota Nivel Piezometro (msnm)</label>
+                    </p-floatlabel>
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        <input pInputText [value]="medida.profundidadActualPozo | number:'1.2-2'" class="w-full h-12" readonly />
+                        <label>Profundidad Actual Pozo (m)</label>
+                    </p-floatlabel>
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        @if (isEditMode) {
+                            <input pInputText [(ngModel)]="editForm.LongitudMedicion" class="w-full" inputStyleClass="w-full h-12" type="number" />
+                        } @else {
+                            <input pInputText [value]="medida.longitudMedicion | number:'1.2-2'" class="w-full h-12" readonly />
+                        }
+                        <label>Longitud Medición (m)</label>
+                    </p-floatlabel>
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        @if (isEditMode) {
+                            <p-datepicker 
+                                [(ngModel)]="editForm.FechaMedicion" 
+                                dateFormat="dd/mm/yy" [showIcon]="true" 
+                                inputStyleClass="w-full h-12"
+                                placeholder="Seleccione una fecha" 
+                                class="w-full" 
+                                inputId="fechaMedicion" 
+                                appendTo="body"/>
+                        } @else {
+                            <input 
+                                pInputText [value]="medida.fechaMedicion | date:'dd/MMM/yyyy'" 
+                                class="w-full h-12" readonly />
+                        }
+                        <label for="fechaMedicion">Fecha Medición</label>
+                    </p-floatlabel>
+                    <p-floatlabel variant="on" class="w-full mb-3">
+                        @if (isEditMode) {
+                            <input pInputText [(ngModel)]="editForm.Comentario" class="w-full h-12" />
+                        } @else {
+                            <input pInputText [value]="medida.comentario" class="w-full h-12" readonly />
+                        }
+                        <label>Comentario</label>
+                    </p-floatlabel>
+                </div>
+            </div>
+        }
+        <div class="flex justify-end gap-2 mt-4">
+            @if (isEditMode) {
+                <p-button label="Cancelar" severity="secondary" (click)="cancelarEdicion()" [disabled]="isLoading" />
+                <p-button label="Guardar" severity="success" (click)="guardarCambios()" [loading]="isLoading" />
+            } @else {
+                <p-button label="Editar" severity="info" (click)="editarMedida()" />
+                <p-button label="Cerrar" severity="secondary" (click)="cerrar()" />
+            }
+        </div>
+    </p-dialog>
+</div>

@@ -1,3 +1,4 @@
+<p-toast />
 <div class="card flex justify-center">
     <p-dialog 
         header="Detalle Depósito" 
@@ -8,35 +9,70 @@
         (onHide)="cerrar()"
     >
         @if (deposito) {
-          <div class="m-2">
-            <p-floatlabel variant="on" class="w-full mb-3">
-              <input pInputText [value]="deposito.nombreDeposito" class="w-full h-12" readonly />
-              <label>Nombre Depósito</label>
-            </p-floatlabel>
-            <p-floatlabel variant="on" class="w-full mb-3">
-              <input pInputText [value]="deposito.ubicacion" class="w-full h-12" readonly />
-              <label>Ubicación</label>
-            </p-floatlabel>
-            <p-floatlabel variant="on" class="w-full mb-3">
-              <input pInputText [value]="deposito.zonaUtm" class="w-full h-12" readonly />
-              <label>Zona UTM</label>
-            </p-floatlabel>
-            <p-floatlabel variant="on" class="w-full mb-3">
-              <input pInputText [value]="deposito.coordenadaEste" class="w-full h-12" readonly />
-              <label>Coordenada Este</label>
-            </p-floatlabel>
-            <p-floatlabel variant="on" class="w-full mb-3">
-              <input pInputText [value]="deposito.coordenadaNorte" class="w-full h-12" readonly />
-              <label>Coordenada Norte</label>
-            </p-floatlabel>
-            <p-floatlabel variant="on" class="w-full mb-3">
-              <input pInputText [value]="deposito.fechaCreacion" class="w-full h-12" readonly />
-              <label>Fecha de Creación</label>
-            </p-floatlabel>
+          <div class="m-2" [ngClass]="{'edit-mode': isEditMode}">
+            <div class="grid grid-cols-1 gap-4">
+              <p-floatlabel variant="on" class="w-full mb-3">
+                @if (isEditMode) {
+                  <input pInputText [(ngModel)]="editForm.nombreDeposito" class="w-full h-12" />
+                } @else {
+                  <input pInputText [value]="deposito.nombreDeposito" class="w-full h-12" readonly />
+                }
+                <label>Nombre Depósito</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                @if (isEditMode) {
+                  <input pInputText [(ngModel)]="editForm.ubicacion" class="w-full h-12" />
+                } @else {
+                  <input pInputText [value]="deposito.ubicacion" class="w-full h-12" readonly />
+                }
+                <label>Ubicación</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                @if (isEditMode) {
+                  <input pInputText type="number" [(ngModel)]="editForm.zonaUtm" class="w-full h-12" />
+                } @else {
+                  <input pInputText [value]="deposito.zonaUtm" class="w-full h-12" readonly />
+                }
+                <label>Zona UTM</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                @if (isEditMode) {
+                  <input pInputText type="number" step="0.001" [(ngModel)]="editForm.coordenadaEste" class="w-full h-12" />
+                } @else {
+                  <input pInputText [value]="deposito.coordenadaEste | number:'1.3-3'" class="w-full h-12" readonly />
+                }
+                <label>Coordenada Este</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                @if (isEditMode) {
+                  <input pInputText type="number" step="0.001" [(ngModel)]="editForm.coordenadaNorte" class="w-full h-12" />
+                } @else {
+                  <input pInputText [value]="deposito.coordenadaNorte | number:'1.3-3'" class="w-full h-12" readonly />
+                }
+                <label>Coordenada Norte</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-full mb-3">
+                @if (isEditMode) {
+                  <p-datepicker [(ngModel)]="editForm.fechaCreacion" dateFormat="dd/mm/yy" [showIcon]="true"
+                    inputStyleClass="w-full h-12" placeholder="Seleccione una fecha"
+                    class="w-full" inputId="fechaCreacion"
+                  />
+                } @else {
+                  <input pInputText [value]="deposito.fechaCreacion | date:'dd/MM/yyyy':'':'es'" class="w-full h-12" readonly />
+                }
+                <label>Fecha de Creación</label>
+              </p-floatlabel>
+            </div>
           </div>
         }
         <div class="flex justify-end gap-2 mt-4">
-            <p-button label="Cerrar" severity="secondary" (click)="cerrar()" />
-        </div>
+            @if (isEditMode) {
+              <p-button label="Cancelar" severity="secondary" (click)="cancelEdit()" [disabled]="isLoading" />
+              <p-button label="Guardar" severity="success" (click)="saveChanges()" [disabled]="isLoading" [loading]="isLoading" />
+            } @else {
+              <p-button label="Editar" severity="info" (click)="enableEditMode()" />
+              <p-button label="Cerrar" severity="secondary" (click)="cerrar()" />
+            }
+          </div>
     </p-dialog>
 </div>

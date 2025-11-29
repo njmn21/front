@@ -51,8 +51,8 @@
                 <tr>
                     <th rowspan="2" style="width:4%; border-right: 2px solid #e5e7eb;" class="text-center">#</th>
                     <th rowspan="2" style="width:7%; border-right: 2px solid #e5e7eb;" class="text-center">
-                        Fecha
-                        <div style="display: flex; justify-content: flex-end; margin-top: 5px;">
+                        Fecha Medición
+                        <div style="display: flex; justify-content: center; margin-top: 5px;">
                             <input pInputText type="text" 
                                 (input)="applyDateFilter($event, dt2)" 
                                 placeholder="ej: 2023, oct"
@@ -116,4 +116,9 @@
     </div>
 </div>
 
-<app-show-medida [medida]="selectedMedida" [visible]="showDialog" (close)="closeDialog()" (medidaUpdated)="onMedidaUpdated()"></app-show-medida>
+<app-show-medida 
+    [medida]="selectedMedida" 
+    [visible]="showDialog" 
+    (close)="closeDialog()" 
+    (medidaUpdated)="onMedidaUpdated()"
+></app-show-medida>

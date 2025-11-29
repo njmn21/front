@@ -47,4 +47,16 @@ export class HitoService {
         })
       )
   }
+
+  updateHito(hitoId: number, hito: IHitoPost): Observable<IHitoPost> {
+    const url = `${this.baseUrl}/Topographic/update-landmark/${hitoId}`;
+    return this.http.put<{ result: IHitoPost }>(url, hito)
+      .pipe(
+        map((response: any) => response.result),
+        catchError(error => {
+          console.error('Error al actualizar hito:', error);
+          return throwError(() => error);
+        })
+      );
+  }
 }

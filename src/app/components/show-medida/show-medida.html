@@ -1,15 +1,16 @@
+<p-toast />
 <div class="card flex justify-center">
     <p-dialog
         header="Detalle Lectura"
         [(visible)]="visible"
         [modal]="true"
         [dismissableMask]="true"
-        [style]="{ width: '45rem' }"
+        [style]="{ width: '60rem' }"
         (onHide)="cerrar()"
     >
         @if (medida) {
           <div class="m-2" [ngClass]="{'edit-mode': isEditMode}">
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-3 gap-4">
               <p-floatlabel variant="on" class="w-full mb-3">
                 <input pInputText [value]="medida.nombreHito" class="w-full h-12" readonly />
                 <label>Nombre Hito</label>
@@ -92,8 +93,12 @@
               </p-floatlabel>
               <p-floatlabel variant="on" class="w-full mb-3">
                 @if (isEditMode) {
-                  <p-datepicker [(ngModel)]="editForm.fechaMedicion" dateFormat="dd/mm/yy" [showIcon]="true" inputStyleClass="w-full h-12"
-                    placeholder="Seleccione una fecha" class="w-full" inputId="fechaMedicion" />
+                  <p-datepicker 
+                    [(ngModel)]="editForm.fechaMedicion" 
+                    dateFormat="dd/mm/yy" [showIcon]="true" 
+                    inputStyleClass="w-full h-12"
+                    placeholder="Seleccione una fecha" class="w-full" 
+                    inputId="fechaMedicion" />
                 } @else {
                   <input pInputText [value]="medida.fechaMedicion | date:'dd/MM/yyyy'" class="w-full h-12" readonly />
                 }

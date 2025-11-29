@@ -1,0 +1,16 @@
+<h2 class="text-4xl font-bold mb-4">Ubicaciones</h2>
+
+<div class="absolute top-4 right-4 z-10">
+    <app-user-menu></app-user-menu>
+</div>
+
+<div class="card flex justify-end">
+    <p-select 
+        [options]="cities" 
+        [(ngModel)]="selectedCity" 
+        optionLabel="name" 
+        placeholder="Seleccione una opción" 
+        class="w-full md:w-56" 
+        (ngModelChange)="onCityChange($event.code)"
+    />
+</div>

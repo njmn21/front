@@ -39,4 +39,16 @@ export class Deposito {
       );
   }
 
+  updateDeposito(depositoId: number, deposito: IDepositoPost): Observable<void> {
+    const url = `${this.baseUrl}/Tailing/update-deposit/${depositoId}`;
+
+    return this.http.put<void>(url, deposito)
+      .pipe(
+        catchError(error => {
+          console.error('Datos:', deposito);
+          return throwError(() => error);
+        })
+      );
+  }
+
 }
