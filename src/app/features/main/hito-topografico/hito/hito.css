@@ -1,0 +1,51 @@
+/* Estilos para la tabla de Hitos Topográficos */
+.hitos-table-container :deep(.p-datatable) {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.hitos-table-container :deep(.p-datatable-thead > tr > th) {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 1rem;
+    background-color: #bbdefb !important;
+    color: #0d47a1 !important;
+    border-bottom: 2px solid rgba(33, 150, 243, 0.2);
+}
+
+.hitos-table-container :deep(.p-datatable-tbody > tr) {
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.hitos-table-container :deep(.p-datatable-tbody > tr:hover) {
+    transform: scale(1.001);
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
+}
+
+.hitos-table-container :deep(.p-datatable-tbody > tr > td) {
+    padding: 0.875rem 1rem;
+}
+
+.hitos-table-container :deep(.p-sortable-column-icon) {
+    color: rgba(33, 150, 243, 0.8) !important;
+}
+
+/* Modo oscuro */
+:host-context(.dark) .hitos-table-container :deep(.p-datatable-thead > tr > th) {
+    background-color: #a7f3d0 !important;
+    color: #064e3b !important;
+    border-bottom: 2px solid rgba(5, 150, 105, 0.3);
+}
+
+:host-context(.dark) .hitos-table-container :deep(.p-sortable-column-icon) {
+    color: rgba(5, 150, 105, 0.9) !important;
+}
+
+:host-context(.dark) .hitos-table-container :deep(.p-datatable-tbody > tr) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+:host-context(.dark) .hitos-table-container :deep(.p-datatable-tbody > tr:hover) {
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
+}

@@ -1,16 +1,45 @@
-<h2 class="text-4xl font-bold mb-4">Ubicaciones</h2>
-
+<h2 class="text-4xl font-bold">Ubicaciones</h2>
 <div class="absolute top-4 right-4 z-10">
     <app-user-menu></app-user-menu>
 </div>
+<div class="flex h-full gap-4 my-8 pb-8">
+    <!-- Panel izquierdo con selector y lista -->
+    <div class="w-80 flex flex-col gap-4">
+        
+        <div class="card">
+            <p-select 
+                [options]="instruments" 
+                [(ngModel)]="selectedInstrument" 
+                optionLabel="name" 
+                placeholder="Seleccione una opción" 
+                class="w-full" 
+                (ngModelChange)="onCityChange($event.code)"
+            />
+        </div>
 
-<div class="card flex justify-end">
-    <p-select 
-        [options]="cities" 
-        [(ngModel)]="selectedCity" 
-        optionLabel="name" 
-        placeholder="Seleccione una opción" 
-        class="w-full md:w-56" 
-        (ngModelChange)="onCityChange($event.code)"
-    />
+        <!-- Lista de ubicaciones con checkboxes -->
+        <div class="card flex-1 overflow-auto" *ngIf="ubicaciones.length > 0">
+            <h3 class="text-lg font-semibold mb-3">Seleccione ubicaciones:</h3>
+            <div class="flex flex-col gap-2">
+                <div *ngFor="let ubicacion of ubicaciones" class="flex items-center gap-2 p-2 hover:bg-gray-100 rounded cursor-pointer">
+                    <p-checkbox 
+                        [(ngModel)]="ubicacion.selected" 
+                        [binary]="true"
+                        (onChange)="onUbicacionChange()"
+                        [inputId]="ubicacion.nombreHito"
+                    />
+                    <label [for]="ubicacion.nombreHito" class="cursor-pointer flex-1">
+                        {{ ubicacion.nombreHito }}
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mapa -->
+    <div class="flex-1 card relative">
+        <div class="absolute top-4 right-4 z-10">
+        </div>
+        <div id="map" style="height: 100%; width: 100%;"></div>
+    </div>
 </div>

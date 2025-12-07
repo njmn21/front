@@ -8,9 +8,9 @@ import { IMeasurementPiezometroGet, IMesasurementPiezometroPost, IPiezometroGet,
   providedIn: 'root'
 })
 export class PiezometroService {
-  private baseUrl = `${environment.API_URL}`;
+  private readonly baseUrl = `${environment.API_URL}`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
   getAllPiezometros(): Observable<IPiezometroGet[]> {
     const url = `${this.baseUrl}/Piezometer/get-all-piezometers`;

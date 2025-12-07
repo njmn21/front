@@ -12,7 +12,17 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-left-sidebar',
-  imports: [CommonModule, RouterModule, DrawerModule, ButtonModule, Ripple, AvatarModule, StyleClass, ToggleSwitchModule, FormsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    DrawerModule,
+    ButtonModule,
+    Ripple,
+    AvatarModule,
+    StyleClass,
+    ToggleSwitchModule,
+    FormsModule
+  ],
   templateUrl: './left-sidebar.html',
   styleUrl: './left-sidebar.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -45,11 +55,11 @@ export class LeftSidebar {
       icon: 'pi pi-fw pi-hammer',
       label: 'Piezómetros de Casagrande'
     },
-    // {
-    //   routeLink: '/ubicacion-mapa',
-    //   icon: 'pi pi-fw pi-map',
-    //   label: 'Ubicaciones en Mapa'
-    // }
+    {
+      routeLink: '/ubicacion-mapa',
+      icon: 'pi pi-fw pi-map',
+      label: 'Ubicaciones en Mapa'
+    }
   ];
 
   closeCallback(e: any): void {

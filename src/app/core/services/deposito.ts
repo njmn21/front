@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { IDepositoGet, IDepositoPost } from '../interfaces/deposito';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Deposito {
-  private baseUrl = `${environment.API_URL}`
+  private readonly baseUrl = `${environment.API_URL}`
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private readonly http: HttpClient
+  ) { }
 
   getAllDepositos(): Observable<IDepositoGet[]> {
     const url = `${this.baseUrl}/Tailing/get-all-deposits`;

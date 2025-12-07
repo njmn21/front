@@ -37,7 +37,7 @@ export class Lecturas implements OnInit {
   datePipe = new DatePipe('es');
 
   constructor(
-    private piezometroService: PiezometroService
+    private readonly piezometroService: PiezometroService
   ) { }
 
   ngOnInit() {

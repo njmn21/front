@@ -46,9 +46,9 @@ export class ShowMedidaPiezometro implements OnChanges {
   };
 
   constructor(
-    private piezometroService: PiezometroService,
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private readonly piezometroService: PiezometroService,
+    private readonly messageService: MessageService,
+    private readonly confirmationService: ConfirmationService
   ) { }
 
   ngOnChanges() {
